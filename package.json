@@ -1,0 +1,63 @@
+{
+  "_from": "@mr.xcray/thycotic-secretserver-client",
+  "_id": "@mr.xcray/thycotic-secretserver-client@2.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-tAAmO59tLlxBrb/XgzIzlsbeqiNGQ9sWINWs4yPkbLzT1IrK6yCHf0grGHhcEbV9ChI+KtahKwN3mKGEhvRilg==",
+  "_location": "/@mr.xcray/thycotic-secretserver-client",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@mr.xcray/thycotic-secretserver-client",
+    "name": "@mr.xcray/thycotic-secretserver-client",
+    "escapedName": "@mr.xcray%2fthycotic-secretserver-client",
+    "scope": "@mr.xcray",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@mr.xcray/thycotic-secretserver-client/-/thycotic-secretserver-client-2.0.1.tgz",
+  "_shasum": "dfb71b753cfc0bb5dae9b0c90bb5227212fa579d",
+  "_spec": "@mr.xcray/thycotic-secretserver-client",
+  "_where": "/home/www/new.crm.afi-d.ru",
+  "author": {
+    "name": "Denis Morozov",
+    "url": "dm@afi-d.ru"
+  },
+  "bugs": {
+    "url": "https://github.com/Afigenius/SecretServer-nodejs/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Thycotic Secret Server NodeJS client for WebAPI",
+  "homepage": "https://github.com/Afigenius/SecretServer-nodejs#readme",
+  "files":[
+    "types.js"
+  ],
+  "keywords": [
+    "thycotic",
+    "secret",
+    "server",
+    "secretserver",
+    "webapi",
+    "nodejs",
+    "js",
+    "client",
+    "soap"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "@mr.xcray/thycotic-secretserver-client",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Afigenius/SecretServer-nodejs.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "2.0.1"
+}

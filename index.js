@@ -1,6 +1,8 @@
 const soap = require('soap');
 
 /**
+ * Starts connection negotiation. May result in async exception in case of connection error.
+ * Connection procedure is async, all methods will wait for it to end before sending requests.
  *
  * @param url
  * @param login
@@ -9,24 +11,21 @@ const soap = require('soap');
  */
 function ThycoticSecretServerClient (url, login, password){
   "use strict";
-  let oThis = this;
 
-  this.token=null;
   this.ERRORS={
     GOT_EMPTY_TOKEN: "Authentication resulted in empty token. That is unexpected.",
     GOT_EMPTY_SECRET: "Got empty secret with no error. That is unexpected."
   };
 
-
   this.connection = this._connect(url, login, password);
-
-};
+}
 
 /**
+ * Starts connection sequence with error handling.
  *
- * @param url
- * @param login
- * @param password
+ * @param {string} url
+ * @param {string} login
+ * @param {string} password
  * @returns {Promise.<[soap, ThycoticSecretServerClient, string]>}
  * @private
  */
@@ -41,7 +40,6 @@ ThycoticSecretServerClient.prototype._connect = async function (url, login, pass
     password: password
   }).then(async answer=>{
     if (!oThis.isError(answer)){
-      //oThis.token = answer.AuthenticateResult.Token;
       return {client:client, context:oThis, token:answer.AuthenticateResult.Token};
     }
   }).catch(error=>{
@@ -51,11 +49,11 @@ ThycoticSecretServerClient.prototype._connect = async function (url, login, pass
 };
 
 /**
+ * Downloads file attached to secret.
  *
- * @param secretId
- * @param itemId
- * @returns {Promise.<void>}
- * @constructor
+ * @param {number} secretId
+ * @param {number} secretItemId
+ * @returns {Promise.<DownloadFileAttachmentByItemIdResult>} file object
  */
 ThycoticSecretServerClient.prototype.DownloadFileAttachmentByItemId = async function(secretId, secretItemId){
   "use strict";
@@ -71,12 +69,13 @@ ThycoticSecretServerClient.prototype.DownloadFileAttachmentByItemId = async func
       }
     })
   })
-}
+};
 
 /**
+ * Gets secret with all fields and files attached.
  *
- * @param id
- * @returns {Promise.<void>}
+ * @param {number} id - secret ID
+ * @returns {Promise.<Secret>}
  */
 ThycoticSecretServerClient.prototype.GetSecretById = async function(id){
   "use strict";
@@ -100,7 +99,7 @@ ThycoticSecretServerClient.prototype.GetSecretById = async function(id){
             item['Value'] = await context.DownloadFileAttachmentByItemId(id, item.Id);
           }
           items[item.FieldName]=item;
-        };
+        }
         secret.Items = items;
         return secret;
       }
@@ -109,9 +108,11 @@ ThycoticSecretServerClient.prototype.GetSecretById = async function(id){
 };
 
 /**
+ * Helper function to centralize exception generation.
  *
  * @param error
  * @private
+ * @throws {string}
  */
 ThycoticSecretServerClient.prototype._exception = function (error){
   "use strict";
@@ -119,8 +120,10 @@ ThycoticSecretServerClient.prototype._exception = function (error){
 };
 
 /**
+ * Helper function to parse and react on Errors in responses.
  *
- * @param answer
+ * @param {Object} answer
+ * @returns {boolean}
  */
 ThycoticSecretServerClient.prototype.isError = function(answer){
   "use strict";
@@ -158,6 +161,11 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
       this._exception(answer.DownloadFileAttachmentByItemIdResult.Errors.string.join(",").trim());
     }
   }
-}
 
+  return false;
+};
+
+/**
+ * @type {ThycoticSecretServerClient}
+ */
 exports.TSSClient = ThycoticSecretServerClient;
