@@ -1,4 +1,8 @@
 const soap = require('soap');
+const {URL} = require('url');
+const ping = require('ping');
+const isDomain = require('is-valid-domain');
+const isIP = require('is-ip');
 
 /**
  * Starts connection negotiation. May result in async exception in case of connection error.
@@ -11,10 +15,12 @@ const soap = require('soap');
  */
 function ThycoticSecretServerClient (url, login, password){
   "use strict";
+  //TODO: add organization and domain params to comply with Authenticate method
 
   this.ERRORS={
     GOT_EMPTY_TOKEN: "Authentication resulted in empty token. That is unexpected.",
-    GOT_EMPTY_SECRET: "Got empty secret with no error. That is unexpected."
+    GOT_EMPTY_SECRET: "Got empty secret with no error. That is unexpected.",
+    BAD_TSS_URL: "It seems that TSS URL provided is incorrect",
   };
 
   this.connection = this._connect(url, login, password);
@@ -31,8 +37,15 @@ function ThycoticSecretServerClient (url, login, password){
  */
 ThycoticSecretServerClient.prototype._connect = async function (url, login, password){
   "use strict";
-  //TODO: add url check and auto-repair
-  const client = await soap.createClientAsync(url);
+
+  url = await this.fixURL(url);
+  console.log(url);
+  let client=null;
+  try {
+    client = await soap.createClientAsync(url);
+  }catch(e){
+    this._exception('BAD_TSS_URL');
+  }
   let oThis = this;
 
   return await client.AuthenticateAsync({
@@ -163,6 +176,58 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
   }
 
   return false;
+};
+
+/**
+ * Helper function that allows to provide only domain or TSS URI without full path to WSDL
+ *
+ * @param {string} url - domain, or ip, or domain/SecretServer
+ * @return {Promise.<{string}>} correct URL to TSS
+ */
+ThycoticSecretServerClient.prototype.fixURL = async function(url){
+  "use strict";
+  let url_=null;
+  try {
+    try {
+      url_ = new URL(url);
+    }catch(e){
+      url_ = new URL("https://"+url);
+    }
+    if (url_.host.length) {
+      if (url_.pathname.search("SSWebService.asmx") === -1) {
+        if (url_.pathname !== '/') { // let's guess that we have TSS URI already
+          if (url_.pathname.substr(-1) !== '/') {
+            url_.pathname=url_.pathname + "/";
+          }
+          url_.pathname=url_.pathname + "webservices/SSWebService.asmx";
+        } else { // by default TSS is under /SecretServer/ URI
+          url_.pathname="/SecretServer/webservices/SSWebService.asmx";
+        }
+      }
+      if (!url_.searchParams.has("WSDL")) { // this one is required
+        url_.search="WSDL"; // we have to assign directly, since otherwise we will get "?WSDL=" with 500 error
+      }
+      url = url_.href;
+    } else {
+      this._exception('BAD_TSS_URL');
+    }
+  }catch(e){
+    try {
+      if (isDomain(url)) { //All is ok, valid domain was provided
+        url = "https://" + url + "/SecretServer/webservices/SSWebService.asmx?WSDL";
+      } else if (isIP(url)) { //IP - strange, but ok
+        url = "http://" + url + "/SecretServer/webservices/SSWebService.asmx?WSDL"; //there is no sense doing HTTPS on IP
+      } else { // whatever you are, if you answer to me, I will work with you
+        let result = await ping.promise.probe(url);
+        if (result) { //let's assume that it is local host with strange name
+          url = "https://" + url + "/SecretServer/webservices/SSWebService.asmx?WSDL";
+        }
+      }
+    }catch(e){
+      this._exception('BAD_TSS_URL');
+    }
+  }
+  return url;
 };
 
 /**
