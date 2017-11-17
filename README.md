@@ -1,4 +1,3 @@
-[![npm version](https://badge.fury.io/js/%40mr.xcray%2Fthycotic-secretserver-client.svg)](https://www.npmjs.com/package/@mr.xcray/thycotic-secretserver-client)
 [![GitHub issues](https://img.shields.io/github/issues/Afigenius/SecretServer-nodejs.svg?style=flat)](https://github.com/Afigenius/SecretServer-nodejs/issues)
 [![GitHub license](https://img.shields.io/github/license/Afigenius/SecretServer-nodejs.svg?style=flat)](https://github.com/Afigenius/SecretServer-nodejs/blob/master/LICENSE)
 
