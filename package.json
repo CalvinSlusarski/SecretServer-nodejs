@@ -23,7 +23,6 @@
   "_resolved": "https://registry.npmjs.org/@mr.xcray/thycotic-secretserver-client/-/thycotic-secretserver-client-2.0.1.tgz",
   "_shasum": "dfb71b753cfc0bb5dae9b0c90bb5227212fa579d",
   "_spec": "@mr.xcray/thycotic-secretserver-client",
-  "_where": "/home/www/new.crm.afi-d.ru",
   "author": {
     "name": "Denis Morozov",
     "url": "dm@afi-d.ru"
@@ -35,7 +34,7 @@
   "deprecated": false,
   "description": "Thycotic Secret Server NodeJS client for WebAPI",
   "homepage": "https://github.com/Afigenius/SecretServer-nodejs#readme",
-  "files":[
+  "files": [
     "types.js"
   ],
   "keywords": [
@@ -59,5 +58,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "2.0.1"
+  "version": "2.0.6",
+  "dependencies": {
+    "is-ip": "^2.0.0",
+    "is-valid-domain": "0.0.5",
+    "ping": "^0.2.2",
+    "soap": "^0.23.0",
+    "url": "^0.11.0"
+  }
 }
