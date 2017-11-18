@@ -114,6 +114,20 @@
  */
 
 /**
+ * @typedef {Object} SearchFolderResult
+ * @property {string[]} Errors
+ * @property {Folder[]} Folders
+ */
+
+/**
+ * @typedef {Object} Folder
+ * @property {int} Id
+ * @property {string} Name
+ * @property {int} TypeId
+ * @property {int} ParentFolderId
+ */
+
+/**
  * @typedef {Object} SecretSummary
  * @property {number} SecretId
  * @property {string} SecretName

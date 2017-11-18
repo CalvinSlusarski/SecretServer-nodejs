@@ -28,6 +28,7 @@ Web-site: https://thycotic.com/products/secret-server/
 ## Implemented
     DownloadFileAttachmentByItemId
     GetSecret
+    SearchFolders
     SearchSecrets
 
 ## Will be implemented
@@ -95,7 +96,6 @@ Web-site: https://thycotic.com/products/secret-server/
     RestoreSSHCommandMenu
     RunActiveDirectorySynchronization
     SaveSSHCommandMenu
-    SearchFolders
     SearchSecretPolicies
     SearchSecretsByExposedFieldValue
     SearchSecretsByExposedValues

@@ -35,6 +35,38 @@ var myService = {
         });
       },
 
+      SearchFolders: function(args, callback){
+        "use strict";
+        if (args.folderName==="nosuchfolder"){
+          callback({
+            SearchFoldersResult: {
+              Folders: null
+            }
+          });
+        }else {
+          callback({
+            SearchFoldersResult: {
+              Folders: {
+                Folder: [
+                  {
+                    Id: 1,
+                    Name: 'Personal Folders',
+                    TypeId: 1,
+                    ParentFolderId: -1
+                  },
+                  {
+                    Id: 23,
+                    Name: 'Персональная папка',
+                    TypeId: 1,
+                    ParentFolderId: -1
+                  }
+                ]
+              }
+            }
+          })
+        }
+      },
+
       SearchSecrets: function(args, callback){
         "use strict";
         if (args.searchTerm!=="Secret"){

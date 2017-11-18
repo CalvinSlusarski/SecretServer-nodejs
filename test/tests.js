@@ -57,6 +57,19 @@ describe("SearchSecrets", function(){
   });
 })
 
+describe("SearchFolders", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().SearchFolders("nosuchfolder")).to.eventually.to.be.an('array').that.is.empty;
+  })
+  it('it should return match for existent Folders', function(){
+    return expect(goodLogin().SearchFolders("")).to.eventually
+      .have.property(0)
+        .that.has.property('Id')
+          .that.is.equal(1);
+  });
+})
+
 after(function() {
   mockup.close();
 });
