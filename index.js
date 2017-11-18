@@ -88,16 +88,16 @@ ThycoticSecretServerClient.prototype.DownloadFileAttachmentByItemId = async func
 /**
  * Gets secret with all fields and files attached.
  *
- * @param {number} secretId - secret ID
+ * @param {number} id - secret ID
  * @returns {Promise.<Secret>}
  */
-ThycoticSecretServerClient.prototype.GetSecret = async function(secretId){
+ThycoticSecretServerClient.prototype.GetSecretById = async function(id){
   "use strict";
   return this.connection.then((connection)=>{
     let {client, context, token}=connection;
     return client.GetSecretAsync({
       token:token,
-      secretId:secretId,
+      secretId:id,
       loadSettingsAndPermissions:true,
 
       //TODO: add possibility to get a secret that requires comment
@@ -110,7 +110,7 @@ ThycoticSecretServerClient.prototype.GetSecret = async function(secretId){
         let items = {};
         for (let item of secret.Items.SecretItem){
           if (item.IsFile){
-            item['Value'] = await context.DownloadFileAttachmentByItemId(secretId, item.Id);
+            item['Value'] = await context.DownloadFileAttachmentByItemId(id, item.Id);
           }
           items[item.FieldName]=item;
         }
