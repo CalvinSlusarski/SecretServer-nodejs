@@ -87,7 +87,7 @@ var myService = {
 };
 
 exports.mockup = mockup;
-exports.TSSClient = require('@mr.xcray/thycotic-secretserver-client').TSSClient;
+exports.TSSClient = require('../index.js').TSSClient;
 exports.chai = require('chai');
 exports.expect = exports.chai.expect;
 let chaiAsPromised = require("chai-as-promised");
