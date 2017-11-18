@@ -62,10 +62,13 @@
   "dependencies": {
     "chai": "*",
     "chai-as-promised": "*",
+    "coveralls": "^3.0.0",
+    "ensure-array": "^1.0.0",
     "fs": "0.0.2",
     "http": "0.0.0",
     "is-ip": "^2.0.0",
     "is-valid-domain": "0.0.5",
+    "istanbul": "^0.4.5",
     "mocha": "*",
     "ping": "^0.2.2",
     "soap": "^0.23.0",
