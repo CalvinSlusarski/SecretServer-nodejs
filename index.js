@@ -1,3 +1,4 @@
+require('./types');
 const soap = require('soap');
 const {URL} = require('url');
 const ping = require('ping');
@@ -39,7 +40,7 @@ ThycoticSecretServerClient.prototype._connect = async function (url, login, pass
   "use strict";
 
   url = await this.fixURL(url);
-  console.log(url);
+
   let client=null;
   try {
     client = await soap.createClientAsync(url);
