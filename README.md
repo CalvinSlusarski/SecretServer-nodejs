@@ -18,7 +18,7 @@ JS/NodeJS client for Thycotic Secret Server
       "password"
     );
       
-    client.GetSecretById(254).then(result => {
+    client.GetSecret(254).then(result => {
       console.log(result);
     });
 ```
