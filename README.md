@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Afigenius/SecretServer-nodejs.svg?branch=master)](https://travis-ci.org/Afigenius/SecretServer-nodejs)
 [![GitHub issues](https://img.shields.io/github/issues/Afigenius/SecretServer-nodejs.svg?style=flat)](https://github.com/Afigenius/SecretServer-nodejs/issues)
 [![GitHub license](https://img.shields.io/github/license/Afigenius/SecretServer-nodejs.svg?style=flat)](https://github.com/Afigenius/SecretServer-nodejs/blob/master/LICENSE)
 
