@@ -18,7 +18,7 @@ JS/NodeJS client for Thycotic Secret Server
       "password"
     );
       
-    client.GetSecretById(254).then(result => {
+    client.GetSecret(254).then(result => {
       console.log(result);
     });
 ```
@@ -26,6 +26,7 @@ JS/NodeJS client for Thycotic Secret Server
 ## Implemented
     DownloadFileAttachmentByItemId
     GetSecret
+    SearchSecrets
 
 ## Will be implemented
     AddDependency
@@ -94,7 +95,6 @@ JS/NodeJS client for Thycotic Secret Server
     SaveSSHCommandMenu
     SearchFolders
     SearchSecretPolicies
-    SearchSecrets
     SearchSecretsByExposedFieldValue
     SearchSecretsByExposedValues
     SearchSecretsByFieldValue

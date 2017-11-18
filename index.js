@@ -1,4 +1,5 @@
 require('./types');
+const array = require('ensure-array');
 const soap = require('soap');
 const {URL} = require('url');
 const ping = require('ping');
@@ -22,6 +23,7 @@ function ThycoticSecretServerClient (url, login, password){
     GOT_EMPTY_TOKEN: "Authentication resulted in empty token. That is unexpected.",
     GOT_EMPTY_SECRET: "Got empty secret with no error. That is unexpected.",
     BAD_TSS_URL: "It seems that TSS URL provided is incorrect",
+    ARRAY_OR_ONE_EXPECTED: "Argument expected to be an array or object."
   };
 
   this.connection = this._connect(url, login, password);
@@ -88,16 +90,16 @@ ThycoticSecretServerClient.prototype.DownloadFileAttachmentByItemId = async func
 /**
  * Gets secret with all fields and files attached.
  *
- * @param {number} id - secret ID
+ * @param {number} secretId - secret ID
  * @returns {Promise.<Secret>}
  */
-ThycoticSecretServerClient.prototype.GetSecretById = async function(id){
+ThycoticSecretServerClient.prototype.GetSecret = async function(secretId){
   "use strict";
   return this.connection.then((connection)=>{
     let {client, context, token}=connection;
     return client.GetSecretAsync({
       token:token,
-      secretId:id,
+      secretId:secretId,
       loadSettingsAndPermissions:true,
 
       //TODO: add possibility to get a secret that requires comment
@@ -110,7 +112,7 @@ ThycoticSecretServerClient.prototype.GetSecretById = async function(id){
         let items = {};
         for (let item of secret.Items.SecretItem){
           if (item.IsFile){
-            item['Value'] = await context.DownloadFileAttachmentByItemId(id, item.Id);
+            item['Value'] = await context.DownloadFileAttachmentByItemId(secretId, item.Id);
           }
           items[item.FieldName]=item;
         }
@@ -119,6 +121,57 @@ ThycoticSecretServerClient.prototype.GetSecretById = async function(id){
       }
     });
   })
+};
+
+/**
+ * Searches secrets by term
+ *
+ * @param {string} searchTerm
+ * @param {boolean} includeDeleted
+ * @param {boolean} includeRestricted
+ * @return {Promise.<Secret[]>}
+ */
+ThycoticSecretServerClient.prototype.SearchSecrets = async function(searchTerm, includeDeleted, includeRestricted){
+  "use strict";
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.SearchSecretsAsync({
+      token:token,
+      searchTerm:searchTerm,
+      includeDeleted: includeDeleted===true,
+      includeRestricted: includeRestricted===true
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (answer.SearchSecretsResult.SecretSummaries!==null) {
+          return answer.SearchSecretsResult.SecretSummaries.SecretSummary;
+        }else{
+          return [];
+        }
+      }
+    });
+  })
+};
+
+/**
+ * Expands SecretSummary[] into Secret[]
+ *
+ * @param {SecretSummary[]|SecretSummary} summaries
+ * @return {Promise.<Secret[]>}
+ */
+ThycoticSecretServerClient.prototype.SecretSummaryToSecret = async function(summaries){
+  "use strict";
+  if (!Array.isArray(summaries) && typeof summaries !== 'object'){
+    this._exception('ARRAY_OR_ONE_EXPECTED');
+  }
+  let promises=[];
+  for (let summary of array(summaries)){
+    promises.push(this.GetSecret(summary.SecretId));
+  }
+  if (Array.isArray(summaries)) {
+    return Promise.all(promises);
+  }else{
+    return promises[0]; //option when there was one SecretSummary instance instead of SecretSummary[]
+  }
 };
 
 /**
@@ -169,10 +222,17 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
     }
   }
 
-  // DownloadFileAttachmentByItemIdResponse
+  // DownloadFileAttachmentByItemIdResult
   else if (answer.hasOwnProperty('DownloadFileAttachmentByItemIdResult')){
     if (answer.DownloadFileAttachmentByItemIdResult.Errors){
       this._exception(answer.DownloadFileAttachmentByItemIdResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // SearchSecretsResult
+  else if (answer.hasOwnProperty('SearchSecretsResult')){
+    if (answer.SearchSecretsResult.Errors){
+      this._exception(answer.SearchSecretsResult.Errors.string.join(",").trim());
     }
   }
 

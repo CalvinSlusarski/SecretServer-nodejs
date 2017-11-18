@@ -108,6 +108,22 @@
  */
 
 /**
+ * @typedef {Object} SearchSecretsResult
+ * @property {string[]} Errors
+ * @property {SecretSummary[]} SecretSummaries
+ */
+
+/**
+ * @typedef {Object} SecretSummary
+ * @property {number} SecretId
+ * @property {string} SecretName
+ * @property {string} SecretTypeName
+ * @property {number} SecretTypeId
+ * @property {number} FolderId
+ * @property {boolean} IsRestricted
+ */
+
+/**
  * @typedef {Object} SecretError
  * @property {string} ErrorCode
  * @property {string} ErrorMessage
