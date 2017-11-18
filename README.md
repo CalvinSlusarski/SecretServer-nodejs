@@ -8,7 +8,7 @@
 JS/NodeJS client for Thycotic Secret Server  
 
 ## Thycotic Secret Server  
-Web-site: https://thycotic.com/products/secret-server/  
+Website: https://thycotic.com/products/secret-server/  
 На русском: https://thycotic.ru/
 
 
