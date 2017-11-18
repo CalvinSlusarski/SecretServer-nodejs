@@ -142,7 +142,7 @@ ThycoticSecretServerClient.prototype.SearchSecrets = async function(searchTerm, 
       includeRestricted: includeRestricted===true
     }).then(async answer=>{
       if (!context.isError(answer)){
-        if (answer.SearchSecretsResult.SecretSummaries!==null) {
+        if (answer.SearchSecretsResult.SecretSummaries.hasOwnProperty('SecretSummary')) {
           return answer.SearchSecretsResult.SecretSummaries.SecretSummary;
         }else{
           return [];
