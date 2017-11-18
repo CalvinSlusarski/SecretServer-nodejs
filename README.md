@@ -6,10 +6,13 @@
 
 # SecretServer-nodejs
 JS/NodeJS client for Thycotic Secret Server  
+
+##Thycotic Secret Server  
 Web-site: https://thycotic.com/products/secret-server/  
 На русском: https://thycotic.ru/
 
-**TSS Version**: 10.3.000015
+
+**Tested TSS Version**: 10.3.000015
 
 ```JavaScript
     let {TSSClient} = require('@mr.xcray/thycotic-secretserver-client');
