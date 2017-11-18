@@ -58,10 +58,15 @@
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha"
   },
-  "version": "2.0.6",
+  "version": "2.0.10",
   "dependencies": {
+    "chai": "*",
+    "chai-as-promised": "*",
+    "fs": "0.0.2",
+    "http": "0.0.0",
     "is-ip": "^2.0.0",
     "is-valid-domain": "0.0.5",
+    "mocha": "*",
     "ping": "^0.2.2",
     "soap": "^0.23.0",
     "url": "^0.11.0"
