@@ -26,10 +26,17 @@ Web-site: https://thycotic.com/products/secret-server/
 ```
 
 ## Implemented
-    DownloadFileAttachmentByItemId
-    GetSecret
-    SearchFolders
-    SearchSecrets
+    
+ - **DownloadFileAttachmentByItemId** - gets filename and contents by ID, used to download attached SSH keys and documents
+ - **GetSecret** - gets secret by ID with all fields as an associative array (name=>[properties])
+ - **SearchFolders** - gets list of all folders with keyword in names
+ - **SearchSecrets** - gets list of all secrets summaries (shortened secret profiles) with keyword in names
+
+## Bonus methods
+*sweet extension to official TSS WebAPI*
+ - **SearchSecrets_intersect** - secrets with all keywords in names
+ - **SearchSecrets_union** - secrets with any of keywords in names
+ - **SecretSummaryToSecret** - converts one or array of secrets summaries to one or array of secret profiles with all properties
 
 ## Will be implemented
     AddDependency

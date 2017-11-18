@@ -124,7 +124,7 @@ ThycoticSecretServerClient.prototype.GetSecret = async function(secretId){
 };
 
 /**
- * Searches secrets by term
+ * Searches secrets containing searchTerm in the name
  *
  * @param {string} searchTerm
  * @param {boolean} includeDeleted
@@ -133,6 +133,7 @@ ThycoticSecretServerClient.prototype.GetSecret = async function(secretId){
  */
 ThycoticSecretServerClient.prototype.SearchSecrets = async function(searchTerm, includeDeleted, includeRestricted){
   "use strict";
+  searchTerm = (""+searchTerm).trim();
   return this.connection.then(connection=>{
     let {client, context, token}=connection;
     return client.SearchSecretsAsync({
@@ -153,6 +154,76 @@ ThycoticSecretServerClient.prototype.SearchSecrets = async function(searchTerm, 
       }
     });
   })
+};
+
+/**
+ * Searches secrets with any of provided words in the name
+ * @param searchTerms
+ * @param includeDeleted
+ * @param includeRestricted
+ * @return {Promise.<void>}
+ * @constructor
+ */
+ThycoticSecretServerClient.prototype.SearchSecrets_union = async function(searchTerms, includeDeleted, includeRestricted){
+  "use strict";
+  let promises = [];
+  if (typeof searchTerms==="string"){
+    searchTerms = searchTerms.trim().split(" ");
+  }
+  let ids=[];
+  let answer=[];
+  searchTerms = array(searchTerms);
+  for (let searchTerm of searchTerms){
+    promises.push(
+      this.SearchSecrets(searchTerm, includeDeleted, includeRestricted)
+        .then(results=>{
+          for(let result of results){
+            if (!ids.hasOwnProperty(result.SecretId)){
+              ids[result.SecretId]=true;
+              answer.push(result);
+            }
+          }
+        })
+    );
+  }
+
+  await Promise.all(promises);
+  return answer;
+};
+
+/**
+ * Searches secrets with all of provided words in the name
+ * @param searchTerms
+ * @param includeDeleted
+ * @param includeRestricted
+ * @return {Promise.<void>}
+ * @constructor
+ */
+ThycoticSecretServerClient.prototype.SearchSecrets_intersect = async function(searchTerms, includeDeleted, includeRestricted){
+  "use strict";
+  let promises = [];
+  if (typeof searchTerms==="string"){
+    searchTerms = searchTerms.trim().split(" ");
+  }
+  let ids=[];
+  let answer=[];
+  searchTerms = array(searchTerms);
+  for (let searchTerm of searchTerms){
+    promises.push(
+      this.SearchSecrets(searchTerm, includeDeleted, includeRestricted)
+        .then(results=>{
+          for(let result of results) {
+            ids[result.SecretId] = ids[result.SecretId] ? ids[result.SecretId]+1 : 1;
+            if (ids[result.SecretId]===searchTerms.length) {
+              answer.push(result);
+            }
+          }
+        })
+    );
+  }
+
+  await Promise.all(promises);
+  return answer;
 };
 
 /**
