@@ -8,10 +8,14 @@ function badLogin(){
 
 function goodLogin(){
   "use strict";
-  return new TSSClient("http://localhost:8001", "goodlogin", "goodpassword");
+  if (typeof goodLogin.connection == 'undefined'){ // to not to flood server with connections
+    goodLogin.connection=new TSSClient("http://localhost:8001", "goodlogin", "goodpassword");
+  }
+  return goodLogin.connection;
 }
 
 describe("Authenticate", function(){
+  "use strict";
   it('badlogin/badpassword should fail with "Login failed"', function() {
     return expect(badLogin().connection).to.eventually.be.rejectedWith('Login failed.');
   });
@@ -20,25 +24,38 @@ describe("Authenticate", function(){
   });
 });
 
-describe("GetSecretById", function(){
-
+describe("GetSecret", function(){
+  "use strict";
   it('it should fail for non-existent secret', function() {
-    return expect(goodLogin().GetSecretById(999)).to.eventually.be.rejectedWith('Access Denied');
+    return expect(goodLogin().GetSecret(999)).to.eventually.be.rejectedWith('Access Denied');
   });
 
   it('it should return existent secret', function() {
-    return expect(goodLogin().GetSecretById(1)).to.eventually.have.property("Id")
+    return expect(goodLogin().GetSecret(1)).to.eventually.have.property("Id")
   });
 
   it('secret with file attached should have Value.FileAttachment property', function() {
-    return expect(goodLogin().GetSecretById(1)).to.eventually
+    return expect(goodLogin().GetSecret(1)).to.eventually
       .have.property("Items")
       .that.has.property("File")
         .that.has.property("Value")
         .that.has.property('FileAttachment')
           .that.is.equal('ok')
-  })
+  });
 });
+
+describe("SearchSecrets", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().SearchSecrets("nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
+  })
+  it('it should return match for existent Secret', function(){
+    return expect(goodLogin().SearchSecrets("Secret")).to.eventually
+      .have.property(0)
+        .that.has.property('SecretId')
+          .that.is.equal(1);
+  });
+})
 
 after(function() {
   mockup.close();

@@ -35,6 +35,34 @@ var myService = {
         });
       },
 
+      SearchSecrets: function(args, callback){
+        "use strict";
+        if (args.searchTerm!=="Secret"){
+          callback({
+            SearchSecretsResult: {
+              SecretSummaries: null
+            }
+          });
+        }else{
+          callback({
+            SearchSecretsResult: {
+              SecretSummaries: {
+                SecretSummary: [
+                  {
+                    SecretId: 1,
+                    SecretName: 'Secret',
+                    SecretTypeName: '',
+                    SecretTypeId: 1,
+                    FolderId: 1,
+                    IsRestricted: false
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
+
       GetSecret: function(args, callback){
         "use strict";
         if (args.secretId===1) {
@@ -95,6 +123,12 @@ exports.chai.use(chaiAsPromised);
 exports.soap = soap;
 
 exports.runServer = new Promise((success)=>{
+  "use strict";
+  mockup.listen(8001);
+  soap.listen(mockup, '/SecretServer/webservices/SSWebService.asmx', myService, xml);
+  success();
+});
+exports.stopServer = new Promise((success)=>{
   "use strict";
   mockup.listen(8001);
   soap.listen(mockup, '/SecretServer/webservices/SSWebService.asmx', myService, xml);
