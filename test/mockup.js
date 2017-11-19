@@ -125,6 +125,118 @@ var myService = {
         }
       },
 
+      SearchSecretsByFolder: function(args, callback){
+        "use strict";
+        if (args.searchTerm!=="Secret" || args.folderId!="1"){
+          callback({
+            SearchSecretsByFolderResult: {
+              SecretSummaries: null
+            }
+          });
+        }else{
+          callback({
+            SearchSecretsByFolderResult: {
+              SecretSummaries: {
+                SecretSummary: [
+                  {
+                    SecretId: 1,
+                    SecretName: 'Secret',
+                    SecretTypeName: '',
+                    SecretTypeId: 1,
+                    FolderId: 1,
+                    IsRestricted: false
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
+
+      SearchSecretsByFieldValue: function(args, callback){
+        "use strict";
+        if (args.searchTerm!=="Secret" || args.fieldName!=="Secret Name"){
+          callback({
+            SearchSecretsByFieldValueResult: {
+              SecretSummaries: null
+            }
+          });
+        }else{
+          callback({
+            SearchSecretsByFieldValueResult: {
+              SecretSummaries: {
+                SecretSummary: [
+                  {
+                    SecretId: 1,
+                    SecretName: 'Secret',
+                    SecretTypeName: '',
+                    SecretTypeId: 1,
+                    FolderId: 1,
+                    IsRestricted: false
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
+
+      SearchSecretsByExposedFieldValue: function(args, callback){
+        "use strict";
+        if (args.searchTerm!=="Secret" || args.fieldName!=="Secret Name"){
+          callback({
+            SearchSecretsByExposedFieldValueResult: {
+              SecretSummaries: null
+            }
+          });
+        }else{
+          callback({
+            SearchSecretsByExposedFieldValueResult: {
+              SecretSummaries: {
+                SecretSummary: [
+                  {
+                    SecretId: 1,
+                    SecretName: 'Secret',
+                    SecretTypeName: '',
+                    SecretTypeId: 1,
+                    FolderId: 1,
+                    IsRestricted: false
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
+
+      SearchSecretsByExposedValues: function(args, callback){
+        "use strict";
+        if (args.searchTerm!=="Secret"){
+          callback({
+            SearchSecretsByExposedValuesResult: {
+              SecretSummaries: null
+            }
+          });
+        }else{
+          callback({
+            SearchSecretsByExposedValuesResult: {
+              SecretSummaries: {
+                SecretSummary: [
+                  {
+                    SecretId: 1,
+                    SecretName: 'Secret',
+                    SecretTypeName: '',
+                    SecretTypeId: 1,
+                    FolderId: 1,
+                    IsRestricted: false
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
+
       SearchSecrets: function(args, callback){
         "use strict";
         if (args.searchTerm!=="Secret"){

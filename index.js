@@ -10,12 +10,16 @@ const isIP = require('is-ip');
  * Starts connection negotiation. May result in async exception in case of connection error.
  * Connection procedure is async, all methods will wait for it to end before sending requests.
  *
- * @param url
- * @param login
- * @param password
+ * @param {string} url
+ * @param {string} login - The username for authentication (required)
+ * @param {string} password - The password for authentication (required)
+ * @param {?string} organization - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
+ empty string or authentication will fail (not required)
+ * @param {?string} domain - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
+ empty string, or “(local)” indicates it is not a domain account. (not required)
  * @constructor
  */
-function ThycoticSecretServerClient (url, login, password){
+function ThycoticSecretServerClient (url, login, password, organization, domain){
   "use strict";
   //TODO: add organization and domain params to comply with Authenticate method
 
@@ -26,7 +30,7 @@ function ThycoticSecretServerClient (url, login, password){
     ARRAY_OR_ONE_EXPECTED: "Argument expected to be an array or object."
   };
 
-  this.connection = this._connect(url, login, password);
+  this.connection = this._connect(url, login, password, organization, domain);
 }
 
 /**
@@ -137,12 +141,161 @@ ThycoticSecretServerClient.prototype.GetSecret = async function(secretId){
 };
 
 /**
+ * Searches for Secrets that match a field name / search term. This will return all Secrets that have a field that is an
+ * exact match of the fieldName value and that field has a value that is an exact match of the fieldSearchTerm
+ * parameter.
+ *
+ * @param {string} fieldName
+ * @param {string} searchTerm
+ * @param {boolean} showDeleted
+ * @param {boolean} showRestricted
+ * @return {Promise.<SecretSummary[]>}
+ */
+ThycoticSecretServerClient.prototype.SearchSecretsByFieldValue = async function(fieldName, searchTerm, showDeleted, showRestricted){
+  "use strict";
+  searchTerm = (""+searchTerm).trim();
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.SearchSecretsByFieldValueAsync({
+      token:token,
+      searchTerm:searchTerm,
+      fieldName: fieldName,
+      showDeleted: showDeleted===true,
+      showRestricted: showRestricted===true
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (
+          answer.SearchSecretsByFieldValueResult.SecretSummaries!==null
+          && answer.SearchSecretsByFieldValueResult.SecretSummaries.hasOwnProperty('SecretSummary')
+        ) {
+          return answer.SearchSecretsByFieldValueResult.SecretSummaries.SecretSummary;
+        }else{
+          return [];
+        }
+      }
+    });
+  })
+};
+
+/**
+ * Searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display
+ * on the Secret Template. This will return all Secrets that contain a field with the specified name and have a value
+ * in that field that contains the search term.
+ *
+ * @param {string} fieldName
+ * @param {string} searchTerm
+ * @param {boolean} showPartialMatches
+ * @param {boolean} showDeleted
+ * @param {boolean} showRestricted
+ * @return {Promise.<SecretSummary[]>}
+ */
+ThycoticSecretServerClient.prototype.SearchSecretsByExposedFieldValue = async function(fieldName, searchTerm, showPartialMatches, showDeleted, showRestricted){
+  "use strict";
+  searchTerm = (""+searchTerm).trim();
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.SearchSecretsByExposedFieldValueAsync({
+      token:token,
+      searchTerm:searchTerm,
+      fieldName: fieldName,
+      showPartialMatches: showPartialMatches===true,
+      showDeleted: showDeleted===true,
+      showRestricted: showRestricted===true
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (
+          answer.SearchSecretsByExposedFieldValueResult.SecretSummaries!==null
+          && answer.SearchSecretsByExposedFieldValueResult.SecretSummaries.hasOwnProperty('SecretSummary')
+        ) {
+          return answer.SearchSecretsByExposedFieldValueResult.SecretSummaries.SecretSummary;
+        }else{
+          return [];
+        }
+      }
+    });
+  })
+};
+
+/**
+ * Searches for Secrets across fields with a search term but only on Secret Fields marked Exposed for Display on
+ * the Secret Template. This will return all Secrets that have a value in that field that contains the search term.
+ *
+ * @param {string} searchTerm
+ * @param {boolean} showPartialMatches
+ * @param {boolean} showDeleted
+ * @param {boolean} showRestricted
+ * @return {Promise.<SecretSummary[]>}
+ */
+ThycoticSecretServerClient.prototype.SearchSecretsByExposedValues = async function(searchTerm, showPartialMatches, showDeleted, showRestricted){
+  "use strict";
+  searchTerm = (""+searchTerm).trim();
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.SearchSecretsByExposedValuesAsync({
+      token:token,
+      searchTerm:searchTerm,
+      showPartialMatches: showPartialMatches===true,
+      showDeleted: showDeleted===true,
+      showRestricted: showRestricted===true
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (
+          answer.SearchSecretsByExposedValuesResult.SecretSummaries!==null
+          && answer.SearchSecretsByExposedValuesResult.SecretSummaries.hasOwnProperty('SecretSummary')
+        ) {
+          return answer.SearchSecretsByExposedValuesResult.SecretSummaries.SecretSummary;
+        }else{
+          return [];
+        }
+      }
+    });
+  })
+};
+
+/**
+ * Searches for Secrets within a folder.
+ *
+ * @param {string} searchTerm
+ * @param {number} folderId
+ * @param {boolean} includeSubFolders
+ * @param {boolean} showDeleted
+ * @param {boolean} showRestricted
+ * @return {Promise.<SecretSummary[]>}
+ */
+ThycoticSecretServerClient.prototype.SearchSecretsByFolder = async function(searchTerm, folderId, includeSubFolders, showDeleted, showRestricted){
+  "use strict";
+  searchTerm = (""+searchTerm).trim();
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.SearchSecretsByFolderAsync({
+      token:token,
+      searchTerm:searchTerm,
+      folderId: folderId,
+      includeSubFolders: includeSubFolders===true,
+      showDeleted: showDeleted===true,
+      showRestricted: showRestricted===true
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (
+          answer.SearchSecretsByFolderResult.SecretSummaries!==null
+          && answer.SearchSecretsByFolderResult.SecretSummaries.hasOwnProperty('SecretSummary')
+        ) {
+          return answer.SearchSecretsByFolderResult.SecretSummaries.SecretSummary;
+        }else{
+          return [];
+        }
+      }
+    });
+  })
+};
+
+/**
  * Searches secrets containing searchTerm in the name
  *
  * @param {string} searchTerm
  * @param {boolean} includeDeleted
  * @param {boolean} includeRestricted
- * @return {Promise.<Secret[]>}
+ * @return {Promise.<SecretSummary[]>}
  */
 ThycoticSecretServerClient.prototype.SearchSecrets = async function(searchTerm, includeDeleted, includeRestricted){
   "use strict";
@@ -174,7 +327,7 @@ ThycoticSecretServerClient.prototype.SearchSecrets = async function(searchTerm, 
  * @param searchTerms
  * @param includeDeleted
  * @param includeRestricted
- * @return {Promise.<void>}
+ * @return {Promise.<SecretSummary[]>}
  * @constructor
  */
 ThycoticSecretServerClient.prototype.SearchSecrets_union = async function(searchTerms, includeDeleted, includeRestricted){
@@ -209,7 +362,7 @@ ThycoticSecretServerClient.prototype.SearchSecrets_union = async function(search
  * @param searchTerms
  * @param includeDeleted
  * @param includeRestricted
- * @return {Promise.<void>}
+ * @return {Promise.<SecretSummary[]>}
  * @constructor
  */
 ThycoticSecretServerClient.prototype.SearchSecrets_intersect = async function(searchTerms, includeDeleted, includeRestricted){
@@ -426,6 +579,34 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
   else if (answer.hasOwnProperty('FolderGetAllChildrenResult')){
     if (answer.FolderGetAllChildrenResult.Errors){
       this._exception(answer.FolderGetAllChildrenResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // SearchSecretsByExposedFieldValueResult
+  else if (answer.hasOwnProperty('SearchSecretsByExposedFieldValueResult')){
+    if (answer.SearchSecretsByExposedFieldValueResult.Errors){
+      this._exception(answer.SearchSecretsByExposedFieldValueResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // SearchSecretsByExposedValuesResult
+  else if (answer.hasOwnProperty('SearchSecretsByExposedValuesResult')){
+    if (answer.SearchSecretsByExposedValuesResult.Errors){
+      this._exception(answer.SearchSecretsByExposedValuesResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // SearchSecretsByFieldValueResult
+  else if (answer.hasOwnProperty('SearchSecretsByFieldValueResult')){
+    if (answer.SearchSecretsByFieldValueResult.Errors){
+      this._exception(answer.SearchSecretsByFieldValueResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // SearchSecretsByFolderResult
+  else if (answer.hasOwnProperty('SearchSecretsByFolderResult')){
+    if (answer.SearchSecretsByFolderResult.Errors){
+      this._exception(answer.SearchSecretsByFolderResult.Errors.string.join(",").trim());
     }
   }
 

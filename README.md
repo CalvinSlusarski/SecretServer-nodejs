@@ -45,6 +45,10 @@ Website: https://thycotic.com/products/secret-server/
  - **SearchSecrets_intersect** - secrets with all keywords in names
  - **SearchSecrets_union** - secrets with any of keywords in names
  - **SecretSummaryToSecret** - converts one or array of secrets summaries to one or array of secret profiles with all properties
+ - **SearchSecretsByExposedFieldValue** - searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display on the Secret Template
+ - **SearchSecretsByExposedValues** - Searches for Secrets across fields with a search term but only on Secret Fields marked Exposed for Display on the Secret Template.
+ - **SearchSecretsByFieldValue** - Searches for Secrets that match a field name / search term
+ - **SearchSecretsByFolder** - Web method that searches for Secrets within a folder.
 
 ## Will be implemented
     AddDependency

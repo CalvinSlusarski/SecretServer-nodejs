@@ -55,7 +55,7 @@ describe("SearchSecrets", function(){
         .that.has.property('SecretId')
           .that.is.equal(1);
   });
-})
+});
 
 describe("SearchFolders", function(){
   "use strict";
@@ -68,7 +68,7 @@ describe("SearchFolders", function(){
         .that.has.property('Id')
           .that.is.equal(1);
   });
-})
+});
 
 describe("FolderGetAllChildren", function(){
   "use strict";
@@ -81,7 +81,7 @@ describe("FolderGetAllChildren", function(){
         .that.has.property('Id')
           .that.is.equal(1);
   });
-})
+});
 
 describe("FolderGet", function(){
   "use strict";
@@ -91,7 +91,59 @@ describe("FolderGet", function(){
   it('it should return match for existent Folder', function(){
     return expect(goodLogin().FolderGet(1)).to.eventually.have.property('Id')
   });
-})
+});
+
+describe("SearchSecretsByFolder", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().SearchSecretsByFolder("nosuchsecret", 999)).to.eventually.to.be.an('array').that.is.empty;
+  })
+  it('it should return match for existent Secret', function(){
+    return expect(goodLogin().SearchSecretsByFolder("Secret", 1)).to.eventually
+      .have.property(0)
+      .that.has.property('SecretId')
+      .that.is.equal(1);
+  });
+});
+
+describe("SearchSecretsByFieldValue", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().SearchSecretsByFieldValue("Secret Name", "nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
+  })
+  it('it should return match for existent Secret', function(){
+    return expect(goodLogin().SearchSecretsByFieldValue("Secret Name", "Secret")).to.eventually
+      .have.property(0)
+      .that.has.property('SecretId')
+      .that.is.equal(1);
+  });
+});
+
+describe("SearchSecretsByExposedValues", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().SearchSecretsByExposedValues("nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
+  })
+  it('it should return match for existent Secret', function(){
+    return expect(goodLogin().SearchSecretsByExposedValues("Secret")).to.eventually
+      .have.property(0)
+      .that.has.property('SecretId')
+      .that.is.equal(1);
+  });
+});
+
+describe("SearchSecretsByExposedFieldValue", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().SearchSecretsByExposedFieldValue("Secret Name", "nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
+  })
+  it('it should return match for existent Secret', function(){
+    return expect(goodLogin().SearchSecretsByExposedFieldValue("Secret Name", "Secret")).to.eventually
+      .have.property(0)
+      .that.has.property('SecretId')
+      .that.is.equal(1);
+  });
+});
 
 after(function() {
   mockup.close();
