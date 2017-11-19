@@ -677,22 +677,33 @@ ThycoticSecretServerClient.prototype._exception = function (error){
  */
 ThycoticSecretServerClient.prototype.isError = function(answer){
   "use strict";
-  //TODO: Simplify checks
+
+  // Check for common Errors array
+  for(
+    let resultType of
+    [
+      'AuthenticateResult', 'GetSecretResult', 'DownloadFileAttachmentByItemIdResult', 'DownloadFileAttachmentResult',
+      'SearchSecretsResult', 'SearchFoldersResult', 'FolderGetResult', 'FolderGetAllChildrenResult',
+      'SearchSecretsByExposedFieldValueResult', 'SearchSecretsByExposedValuesResult', 'SearchSecretsByFieldValueResult',
+      'SearchSecretsByFolderResult', 'GetSecretsByFieldValueResult', 'GetSecretsByExposedFieldValueResult',
+      'GetSecretItemHistoryByFieldNameResult'
+    ]
+    ){
+    if (answer.hasOwnProperty(resultType) && answer[resultType].hasOwnProperty('Errors') && answer[resultType].Errors) {
+      this._exception(answer[resultType].Errors.string.join(",").trim());
+    }
+  }
 
   // AuthenticateResult
   if (answer.hasOwnProperty('AuthenticateResult')) {
-    if (answer.AuthenticateResult.Errors) {
-      this._exception(answer.AuthenticateResult.Errors.string.join(",").trim());
-    } else if (answer.AuthenticateResult.Token.length === 0) {
+    if (answer.AuthenticateResult.Token.length === 0) {
       this._exception('GOT_EMPTY_TOKEN');
     }
   }
 
   // GetSecretResult
   else if(answer.hasOwnProperty('GetSecretResult')) {
-    if (answer.GetSecretResult.Errors){
-      this._exception(answer.GetSecretResult.Errors.string.join(",").trim());
-    }else if(answer.GetSecretResult.SecretError){
+    if(answer.GetSecretResult.SecretError){
       this._exception(
         "["+answer.GetSecretResult.SecretError.ErrorCode+"] "+
         answer.GetSecretResult.SecretError.ErrorMessage + ": "+
@@ -703,97 +714,6 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
       // <s:element minOccurs="1" maxOccurs="1" name="AllowsResponse" type="s:boolean"/>
     }else if(!answer.GetSecretResult.Secret.hasOwnProperty('Id') || !answer.GetSecretResult.Secret.Id){
       this._exception('GOT_EMPTY_SECRET');
-    }
-  }
-
-  // DownloadFileAttachmentByItemIdResult
-  else if (answer.hasOwnProperty('DownloadFileAttachmentByItemIdResult')){
-    if (answer.DownloadFileAttachmentByItemIdResult.Errors){
-      this._exception(answer.DownloadFileAttachmentByItemIdResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // DownloadFileAttachmentResult
-  else if (answer.hasOwnProperty('DownloadFileAttachmentResult')){
-    if (answer.DownloadFileAttachmentResult.Errors){
-      this._exception(answer.DownloadFileAttachmentResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // SearchSecretsResult
-  else if (answer.hasOwnProperty('SearchSecretsResult')){
-    if (answer.SearchSecretsResult.Errors){
-      this._exception(answer.SearchSecretsResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // SearchFoldersResult
-  else if (answer.hasOwnProperty('SearchFoldersResult')){
-    if (answer.SearchFoldersResult.Errors){
-      this._exception(answer.SearchFoldersResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // FolderGetResult
-  else if (answer.hasOwnProperty('FolderGetResult')){
-    if (answer.FolderGetResult.Errors){
-      this._exception(answer.FolderGetResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // FolderGetAllChildrenResult
-  else if (answer.hasOwnProperty('FolderGetAllChildrenResult')){
-    if (answer.FolderGetAllChildrenResult.Errors){
-      this._exception(answer.FolderGetAllChildrenResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // SearchSecretsByExposedFieldValueResult
-  else if (answer.hasOwnProperty('SearchSecretsByExposedFieldValueResult')){
-    if (answer.SearchSecretsByExposedFieldValueResult.Errors){
-      this._exception(answer.SearchSecretsByExposedFieldValueResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // SearchSecretsByExposedValuesResult
-  else if (answer.hasOwnProperty('SearchSecretsByExposedValuesResult')){
-    if (answer.SearchSecretsByExposedValuesResult.Errors){
-      this._exception(answer.SearchSecretsByExposedValuesResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // SearchSecretsByFieldValueResult
-  else if (answer.hasOwnProperty('SearchSecretsByFieldValueResult')){
-    if (answer.SearchSecretsByFieldValueResult.Errors){
-      this._exception(answer.SearchSecretsByFieldValueResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // SearchSecretsByFolderResult
-  else if (answer.hasOwnProperty('SearchSecretsByFolderResult')){
-    if (answer.SearchSecretsByFolderResult.Errors){
-      this._exception(answer.SearchSecretsByFolderResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // GetSecretsByFieldValueResult
-  else if (answer.hasOwnProperty('GetSecretsByFieldValueResult')){
-    if (answer.GetSecretsByFieldValueResult.Errors){
-      this._exception(answer.GetSecretsByFieldValueResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // GetSecretsByExposedFieldValueResult
-  else if (answer.hasOwnProperty('GetSecretsByExposedFieldValueResult')){
-    if (answer.GetSecretsByExposedFieldValueResult.Errors){
-      this._exception(answer.GetSecretsByExposedFieldValueResult.Errors.string.join(",").trim());
-    }
-  }
-
-  // GetSecretItemHistoryByFieldNameResult
-  else if (answer.hasOwnProperty('GetSecretItemHistoryByFieldNameResult')){
-    if (answer.GetSecretItemHistoryByFieldNameResult.Errors){
-      this._exception(answer.GetSecretItemHistoryByFieldNameResult.Errors.string.join(",").trim());
     }
   }
 
