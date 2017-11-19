@@ -119,6 +119,19 @@ describe("SearchSecretsByFieldValue", function(){
   });
 });
 
+describe("GetSecretsByFieldValue", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().GetSecretsByFieldValue("Secret Name", "nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
+  });
+  it('it should return match for existent Secret', function(){
+    return expect(goodLogin().GetSecretsByFieldValue("Secret Name", "Secret")).to.eventually
+      .have.property(0)
+      .that.has.property('Id')
+      .that.is.equal(1);
+  });
+});
+
 describe("SearchSecretsByExposedValues", function(){
   "use strict";
   it('it should return empty array if there is no matches', function(){
@@ -128,6 +141,19 @@ describe("SearchSecretsByExposedValues", function(){
     return expect(goodLogin().SearchSecretsByExposedValues("Secret")).to.eventually
       .have.property(0)
       .that.has.property('SecretId')
+      .that.is.equal(1);
+  });
+});
+
+describe("GetSecretsByExposedFieldValue", function(){
+  "use strict";
+  it('it should return empty array if there is no matches', function(){
+    return expect(goodLogin().GetSecretsByExposedFieldValue("Secret Name", "nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
+  });
+  it('it should return match for existent Secret', function(){
+    return expect(goodLogin().GetSecretsByExposedFieldValue("Secret Name", "Secret")).to.eventually
+      .have.property(0)
+      .that.has.property('Id')
       .that.is.equal(1);
   });
 });
@@ -148,3 +174,6 @@ describe("SearchSecretsByExposedFieldValue", function(){
 after(function() {
   mockup.close();
 });
+
+//GetSecretsByFieldValue
+//GetSecretsByExposedFieldValue

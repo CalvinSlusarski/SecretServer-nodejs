@@ -11,12 +11,12 @@ const isIP = require('is-ip');
  * Connection procedure is async, all methods will wait for it to end before sending requests.
  *
  * @param {string} url
- * @param {string} login - The username for authentication
- * @param {string} password - The password for authentication
- * @param {string} [organization=null] - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
- empty string or authentication will fail
- * @param {string} [domain=null] - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
- empty string, or “(local)” indicates it is not a domain account.
+ * @param {string} login - The username for authentication (required)
+ * @param {string} password - The password for authentication (required)
+ * @param {?string} organization - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
+ empty string or authentication will fail (not required)
+ * @param {?string} domain - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
+ empty string, or “(local)” indicates it is not a domain account. (not required)
  * @constructor
  */
 function ThycoticSecretServerClient (url, login, password, organization, domain){
@@ -39,10 +39,10 @@ function ThycoticSecretServerClient (url, login, password, organization, domain)
  * @param {string} url
  * @param {string} login - The username for authentication (required)
  * @param {string} password - The password for authentication (required)
- * @param {string} [organization=null] - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
- empty string or authentication will fail
- * @param {string} [domain=null] - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
- empty string, or “(local)” indicates it is not a domain account.
+ * @param {?string} organization - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
+ empty string or authentication will fail (not required)
+ * @param {?string} domain - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
+ empty string, or “(local)” indicates it is not a domain account. (not required)
  * @returns {Promise.<[soap, ThycoticSecretServerClient, string]>}
  * @private
  */
@@ -126,14 +126,7 @@ ThycoticSecretServerClient.prototype.GetSecret = async function(secretId){
     }).then(async answer=>{
       if (!context.isError(answer)){
         let secret = answer.GetSecretResult.Secret;
-        let items = {};
-        for (let item of secret.Items.SecretItem){
-          if (item.IsFile){
-            item['Value'] = await context.DownloadFileAttachmentByItemId(secretId, item.Id);
-          }
-          items[item.FieldName]=item;
-        }
-        secret.Items = items;
+        await context.fixItems(secret);
         return secret;
       }
     });
@@ -178,6 +171,46 @@ ThycoticSecretServerClient.prototype.SearchSecretsByFieldValue = async function(
 };
 
 /**
+ * Searches for Secrets that match a field name / search term. This will return all Secrets that have a field that is an
+ * exact match of the fieldName value and that field has a value that is an exact match of the fieldSearchTerm
+ * parameter.
+ *
+ * @param {string} fieldName
+ * @param {string} searchTerm
+ * @param {boolean} showDeleted
+ * @return {Promise.<Secret[]>}
+ */
+ThycoticSecretServerClient.prototype.GetSecretsByFieldValue = async function(fieldName, searchTerm, showDeleted){
+  "use strict";
+  searchTerm = (""+searchTerm).trim();
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.GetSecretsByFieldValueAsync({
+      token:token,
+      searchTerm:searchTerm,
+      fieldName: fieldName,
+      showDeleted: showDeleted===true,
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (
+          answer.GetSecretsByFieldValueResult.Secrets!==null
+          && answer.GetSecretsByFieldValueResult.Secrets.hasOwnProperty('Secret')
+        ) {
+          let secrets=[];
+          for(let secret of answer.GetSecretsByFieldValueResult.Secrets.Secret){
+            await context.fixItems(secret);
+            secrets.push(secret);
+          }
+          return secrets;
+        }else{
+          return [];
+        }
+      }
+    });
+  })
+};
+
+/**
  * Searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display
  * on the Secret Template. This will return all Secrets that contain a field with the specified name and have a value
  * in that field that contains the search term.
@@ -209,6 +242,48 @@ ThycoticSecretServerClient.prototype.SearchSecretsByExposedFieldValue = async fu
         ) {
           return answer.SearchSecretsByExposedFieldValueResult.SecretSummaries.SecretSummary;
         }else{
+          return [];
+        }
+      }
+    });
+  })
+};
+
+/**
+ * Searches for Secrets that match a field name / search term. This will return all Secrets that have a field that is an
+ * exact match of the fieldName value and that field has a value that is an exact match of the fieldSearchTerm
+ * parameter.
+ *
+ * @param {string} fieldName
+ * @param {string} searchTerm
+ * @param {boolean} showPartialMatches
+ * @param {boolean} showDeleted
+ * @return {Promise.<Secret[]>}
+ */
+ThycoticSecretServerClient.prototype.GetSecretsByExposedFieldValue = async function(fieldName, searchTerm, showPartialMatches, showDeleted){
+  "use strict";
+  searchTerm = (""+searchTerm).trim();
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.GetSecretsByExposedFieldValueAsync({
+      token:token,
+      searchTerm:searchTerm,
+      fieldName: fieldName,
+      showPartialMatches: showPartialMatches===true,
+      showDeleted: showDeleted===true,
+    }).then(async answer=>{
+      if (!context.isError(answer)) {
+        if (
+          answer.GetSecretsByExposedFieldValueResult.Secrets !== null
+          && answer.GetSecretsByExposedFieldValueResult.Secrets.hasOwnProperty('Secret')
+        ) {
+          let secrets = [];
+          for (let secret of answer.GetSecretsByExposedFieldValueResult.Secrets.Secret) {
+            await context.fixItems(secret);
+            secrets.push(secret);
+          }
+          return secrets;
+        } else {
           return [];
         }
       }
@@ -610,7 +685,54 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
     }
   }
 
+  // GetSecretsByFieldValueResult
+  else if (answer.hasOwnProperty('GetSecretsByFieldValueResult')){
+    if (answer.GetSecretsByFieldValueResult.Errors){
+      this._exception(answer.GetSecretsByFieldValueResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // GetSecretsByExposedFieldValueResult
+  else if (answer.hasOwnProperty('GetSecretsByExposedFieldValueResult')){
+    if (answer.GetSecretsByExposedFieldValueResult.Errors){
+      this._exception(answer.GetSecretsByExposedFieldValueResult.Errors.string.join(",").trim());
+    }
+  }
+
   return false;
+};
+
+/**
+ * Helper function that changes SecretItems into handy associative array with all attached files inside
+ *
+ * @param {Object} secret
+ */
+ThycoticSecretServerClient.prototype.fixItems = async function(secret){
+  "use strict";
+  let items = {};
+  if (
+    (
+      !secret.hasOwnProperty('Items')
+      || secret.Items===null
+      || ( // since we are working with soap, we need to check for null really deeply
+        secret.Items.hasOwnProperty('attributes')
+        && secret.Items.attributes.hasOwnProperty('xsi:nil')
+      )
+    )
+    && secret.hasOwnProperty('Id')
+  ){
+    //some WebAPI methods return secret with Items:null
+    let fixed = await this.GetSecret(secret.Id);
+    secret.Items = Object.assign({}, fixed.Items);
+    return;
+  }
+  for (let item of secret.Items.SecretItem){
+    if (item.IsFile){
+      item['Value'] = await this.DownloadFileAttachmentByItemId(secret.Id, item.Id);
+    }
+    items[item.FieldName]=item;
+  }
+  secret.Items = Object.assign({}, items); //force copy, otherwise items will get nulled after this function life
 };
 
 /**

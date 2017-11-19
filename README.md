@@ -40,9 +40,11 @@ Website: https://thycotic.com/products/secret-server/
  - **SearchFolders** - gets list of all folders with keyword in names
  - **SearchSecrets** - gets list of all secrets summaries (shortened secret profiles) with keyword in names
  - **SearchSecretsByExposedFieldValue** - searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display on the Secret Template
- - **SearchSecretsByExposedValues** - Searches for Secrets across fields with a search term but only on Secret Fields marked Exposed for Display on the Secret Template.
+ - **SearchSecretsByExposedValues** - Searches for Secrets across fields with a search term but only on Secret Fields marked Exposed for Display on the Secret Template
  - **SearchSecretsByFieldValue** - Searches for Secrets that match a field name / search term
- - **SearchSecretsByFolder** - Web method that searches for Secrets within a folder.
+ - **SearchSecretsByFolder** - Web method that searches for Secrets within a folder
+ - **GetSecretsByExposedFieldValue** - Searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display on the Secret Template
+ - **GetSecretsByFieldValue** - Searches for Secrets that match a field name / search term. This will return all Secrets that contain a field with the specified name and have a value in that field that contains the search term
 
 ## Bonus methods
 *sweet extension to official TSS WebAPI*
@@ -95,8 +97,6 @@ Website: https://thycotic.com/products/secret-server/
     GetSecretAudit
     GetSecretItemHistoryByFieldName
     GetSecretPolicyForSecret
-    GetSecretsByExposedFieldValue
-    GetSecretsByFieldValue
     GetSecretTemplateFields
     GetSecretTemplates
     GetSSHCommandMenu

@@ -181,6 +181,82 @@ var myService = {
         }
       },
 
+      GetSecretsByFieldValue: function(args, callback){
+        "use strict";
+        if (args.searchTerm!=="Secret" || args.fieldName!=="Secret Name"){
+          callback({
+            GetSecretsByFieldValueResult: {
+              Secrets: null
+            }
+          });
+        }else{
+          callback({
+            GetSecretsByFieldValueResult: {
+              Secrets: {
+                Secret: [
+                  {
+                    Name: 'Secret',
+                    Id: 1,
+                    SecretTypeId: 1,
+                    FolderId: 1,
+                    IsWebLauncher: false,
+                    CheckOutMinutesRemaining: 0,
+                    IsCheckedOut: false,
+                    CheckOutUserDisplayName: '',
+                    CheckOutUserId: 0,
+                    IsOutOfSync: false,
+                    IsRestricted: false,
+                    OutOfSyncReason: '',
+                    SecretSettings: [],
+                    SecretPermissions: [],
+                    Active: true,
+                    Items: null
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
+
+      GetSecretsByExposedFieldValue: function(args, callback){
+        "use strict";
+        if (args.searchTerm!=="Secret" || args.fieldName!=="Secret Name"){
+          callback({
+            GetSecretsByExposedFieldValueResult: {
+              Secrets: null
+            }
+          });
+        }else{
+          callback({
+            GetSecretsByExposedFieldValueResult: {
+              Secrets: {
+                Secret: [
+                  {
+                    Name: 'Secret',
+                    Id: 1,
+                    SecretTypeId: 1,
+                    FolderId: 1,
+                    IsWebLauncher: false,
+                    CheckOutMinutesRemaining: 0,
+                    IsCheckedOut: false,
+                    CheckOutUserDisplayName: '',
+                    CheckOutUserId: 0,
+                    IsOutOfSync: false,
+                    IsRestricted: false,
+                    OutOfSyncReason: '',
+                    SecretSettings: [],
+                    SecretPermissions: [],
+                    Active: true,
+                    Items: null
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
+
       SearchSecretsByExposedFieldValue: function(args, callback){
         "use strict";
         if (args.searchTerm!=="Secret" || args.fieldName!=="Secret Name"){
