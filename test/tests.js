@@ -171,6 +171,22 @@ describe("SearchSecretsByExposedFieldValue", function(){
   });
 });
 
+describe("GetSecretItemHistoryByFieldName", function(){
+  "use strict";
+  it('it should result in error if there is no matches', function(){
+    return expect(goodLogin().GetSecretItemHistoryByFieldName(999, "Field")).to.eventually.be.rejectedWith('You do not have access to view this Secret.');
+  });
+  it('it should result in error if there is no matches', function(){
+    return expect(goodLogin().GetSecretItemHistoryByFieldName(1, "NoField")).to.eventually.be.rejectedWith('Field Does Not Exist');
+  });
+  it('it should return history as array of changes', function(){
+    return expect(goodLogin().GetSecretItemHistoryByFieldName(1, "Field")).to.eventually
+      .have.property(0)
+      .that.has.property('SecretItemHistoryId')
+      .that.is.equal(1);
+  });
+});
+
 after(function() {
   mockup.close();
 });

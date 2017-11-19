@@ -145,6 +145,17 @@
  */
 
 /**
+ * @typedef {Object} SecretItemHistoryWebServiceResult
+ * @property {number} SecretItemHistoryId
+ * @property {number} UserId
+ * @property {number} SecretItemId
+ * @property {number} SecretId
+ * @property {date} Date
+ * @property {string} ItemValueNew
+ * @property {string}ItemValueNew2
+ */
+
+/**
  * @typedef {Object} SecretError
  * @property {string} ErrorCode
  * @property {string} ErrorMessage

@@ -40,6 +40,7 @@ Website: https://thycotic.com/products/secret-server/
  - **GetSecret** - gets secret by ID with all fields as an associative array (name=>[properties])
  - **GetSecretsByExposedFieldValue** - Searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display on the Secret Template
  - **GetSecretsByFieldValue** - Searches for Secrets that match a field name / search term. This will return all Secrets that contain a field with the specified name and have a value in that field that contains the search term
+ - **GetSecretItemHistoryByFieldName** - Use this method to retrieve the history (past values) that were audited for a specific field of a Secret
  - **SearchFolders** - gets list of all folders with keyword in names
  - **SearchSecrets** - gets list of all secrets summaries (shortened secret profiles) with keyword in names
  - **SearchSecretsByExposedFieldValue** - searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display on the Secret Template
@@ -95,7 +96,6 @@ Website: https://thycotic.com/products/secret-server/
     GetReport
     GetScript
     GetSecretAudit
-    GetSecretItemHistoryByFieldName
     GetSecretPolicyForSecret
     GetSecretTemplateFields
     GetSecretTemplates

@@ -341,6 +341,45 @@ var myService = {
         }
       },
 
+      GetSecretItemHistoryByFieldName: function(args, callback){
+        "use strict";
+        if (args.secretId!==1){
+          callback({
+            GetSecretItemHistoryByFieldNameResult:{
+              Errors:{
+                string:['You do not have access to view this Secret.']
+              }
+            }
+          });
+        } else if (args.fieldDisplayName!=='Field'){
+          callback({
+            GetSecretItemHistoryByFieldNameResult:{
+              Errors:{
+                string:['Field Does Not Exist']
+              }
+            }
+          });
+        }else {
+          callback({
+            GetSecretItemHistoryByFieldNameResult: {
+              Success: true,
+              SecretItemHistories: {
+                SecretItemHistoryWebServiceResult: [
+                  {
+                    SecretItemHistoryId: 1,
+                    UserId: 1,
+                    SecretItemId: 1,
+                    SecretId: 1,
+                    Date: '2017-08-21T12:21:34.233Z',
+                    ItemValueNew: 'test',
+                    ItemValueNew2: ''
+                  }
+                ]
+              }
+            }
+          });
+        }
+      },
       GetSecret: function(args, callback){
         "use strict";
         if (args.secretId===1) {

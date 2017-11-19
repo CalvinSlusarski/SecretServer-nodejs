@@ -82,6 +82,41 @@ ThycoticSecretServerClient.prototype._connect = async function (url, login, pass
 };
 
 /**
+ * Use this method to retrieve the history (past values) that were audited for a specific field of a Secret
+ *
+ * @param {number} secretId
+ * @param {string} fieldDisplayName
+ * @return {Promise.<SecretItemHistoryWebServiceResult[]>}
+ * @constructor
+ */
+ThycoticSecretServerClient.prototype.GetSecretItemHistoryByFieldName = async function(secretId, fieldDisplayName){
+  "use strict";
+  return this.connection.then((connection)=>{
+    let {client, context, token}=connection;
+    return client.GetSecretItemHistoryByFieldNameAsync({
+      token:token,
+      secretId:secretId,
+      fieldDisplayName: fieldDisplayName
+    }).then(async answer=>{
+      if (
+        !context.isError(answer)
+        && answer.GetSecretItemHistoryByFieldNameResult.Success===true
+      ){
+        if (
+          answer.GetSecretItemHistoryByFieldNameResult.SecretItemHistories!==null
+          && answer.GetSecretItemHistoryByFieldNameResult.SecretItemHistories.hasOwnProperty('SecretItemHistoryWebServiceResult')
+          && answer.GetSecretItemHistoryByFieldNameResult.SecretItemHistories.SecretItemHistoryWebServiceResult!==null
+        ){
+          return answer.GetSecretItemHistoryByFieldNameResult.SecretItemHistories.SecretItemHistoryWebServiceResult
+        }else{
+          return [];
+        }
+      }
+    })
+  })
+};
+
+/**
  * A web method that downloads a file attachment stored on a Secret
  *
  * @param {number} secretId
@@ -650,6 +685,13 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
     }
   }
 
+  // DownloadFileAttachmentResult
+  else if (answer.hasOwnProperty('DownloadFileAttachmentResult')){
+    if (answer.DownloadFileAttachmentResult.Errors){
+      this._exception(answer.DownloadFileAttachmentResult.Errors.string.join(",").trim());
+    }
+  }
+
   // SearchSecretsResult
   else if (answer.hasOwnProperty('SearchSecretsResult')){
     if (answer.SearchSecretsResult.Errors){
@@ -717,6 +759,13 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
   else if (answer.hasOwnProperty('GetSecretsByExposedFieldValueResult')){
     if (answer.GetSecretsByExposedFieldValueResult.Errors){
       this._exception(answer.GetSecretsByExposedFieldValueResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // GetSecretItemHistoryByFieldNameResult
+  else if (answer.hasOwnProperty('GetSecretItemHistoryByFieldNameResult')){
+    if (answer.GetSecretItemHistoryByFieldNameResult.Errors){
+      this._exception(answer.GetSecretItemHistoryByFieldNameResult.Errors.string.join(",").trim());
     }
   }
 
