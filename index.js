@@ -171,9 +171,8 @@ ThycoticSecretServerClient.prototype.SearchSecretsByFieldValue = async function(
 };
 
 /**
- * Searches for Secrets that match a field name / search term. This will return all Secrets that have a field that is an
- * exact match of the fieldName value and that field has a value that is an exact match of the fieldSearchTerm
- * parameter.
+ * Searches for Secrets that match a field name / search term. This will return all Secrets that contain a field with
+ * the specified name and have a value in that field that contains the search term.
  *
  * @param {string} fieldName
  * @param {string} searchTerm
@@ -250,9 +249,9 @@ ThycoticSecretServerClient.prototype.SearchSecretsByExposedFieldValue = async fu
 };
 
 /**
- * Searches for Secrets that match a field name / search term. This will return all Secrets that have a field that is an
- * exact match of the fieldName value and that field has a value that is an exact match of the fieldSearchTerm
- * parameter.
+ * Searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display
+ * on the Secret Template. This will return all Secrets that contain a field with the specified name and have a value
+ * in that field that contains the search term.
  *
  * @param {string} fieldName
  * @param {string} searchTerm
