@@ -70,6 +70,16 @@ describe("SearchFolders", function(){
   });
 })
 
+describe("FolderGet", function(){
+  "use strict";
+  it('it should return null if there is no matches', function(){
+    return expect(goodLogin().FolderGet(999)).to.eventually.to.be.null;
+  })
+  it('it should return match for existent Folder', function(){
+    return expect(goodLogin().FolderGet(1)).to.eventually.have.property('Id')
+  });
+})
+
 after(function() {
   mockup.close();
 });

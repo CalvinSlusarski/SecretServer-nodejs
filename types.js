@@ -114,6 +114,13 @@
  */
 
 /**
+ * @typedef {Object} GetFolderResult
+ * @property {string[]} Errors
+ * @property {Folder} Folder
+ * @property {boolean} Success
+ */
+
+/**
  * @typedef {Object} SearchFolderResult
  * @property {string[]} Errors
  * @property {Folder[]} Folders

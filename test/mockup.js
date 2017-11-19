@@ -67,6 +67,30 @@ var myService = {
         }
       },
 
+      FolderGet: function(args, callback){
+        "use strict";
+        if (args.folderId!==1){
+          callback({
+            FolderGetResult: {
+              Success:false,
+              Folder: null
+            }
+          });
+        }else {
+          callback({
+            FolderGetResult: {
+              Success:true,
+              Folder:{
+                Id: 1,
+                Name: 'Personal Folders',
+                TypeId: 1,
+                ParentFolderId: -1
+              }
+            }
+          })
+        }
+      },
+
       SearchSecrets: function(args, callback){
         "use strict";
         if (args.searchTerm!=="Secret"){

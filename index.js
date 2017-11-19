@@ -240,6 +240,34 @@ ThycoticSecretServerClient.prototype.SearchSecrets_intersect = async function(se
 };
 
 /**
+ * Gets folder by Id
+ *
+ * @param {int} folderId
+ * @return {Promise.<Folder|null>}
+ */
+ThycoticSecretServerClient.prototype.FolderGet = async function(folderId){
+  "use strict";
+  return this.connection.then(connection=>{
+    let {client, context, token}=connection;
+    return client.FolderGetAsync({
+      token:token,
+      folderId:folderId,
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (
+          answer.FolderGetResult.Success===true &&
+          answer.FolderGetResult.hasOwnProperty('Folder')
+        ) {
+          return answer.FolderGetResult.Folder;
+        }else{
+          return null;
+        }
+      }
+    });
+  })
+};
+
+/**
  * Searches folders by name
  *
  * @param {string} folderName
@@ -309,6 +337,7 @@ ThycoticSecretServerClient.prototype._exception = function (error){
  */
 ThycoticSecretServerClient.prototype.isError = function(answer){
   "use strict";
+  //TODO: Simplify checks
 
   // AuthenticateResult
   if (answer.hasOwnProperty('AuthenticateResult')) {
@@ -355,6 +384,13 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
   else if (answer.hasOwnProperty('SearchFoldersResult')){
     if (answer.SearchFoldersResult.Errors){
       this._exception(answer.SearchFoldersResult.Errors.string.join(",").trim());
+    }
+  }
+
+  // FolderGetResult
+  else if (answer.hasOwnProperty('FolderGetResult')){
+    if (answer.FolderGetResult.Errors){
+      this._exception(answer.FolderGetResult.Errors.string.join(",").trim());
     }
   }
 

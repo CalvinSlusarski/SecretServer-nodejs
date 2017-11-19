@@ -58,7 +58,7 @@
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha"
   },
-  "version": "2.0.15",
+  "version": "2.0.16",
   "dependencies": {
     "chai": "*",
     "chai-as-promised": "*",
