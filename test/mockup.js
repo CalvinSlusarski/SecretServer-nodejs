@@ -67,6 +67,40 @@ var myService = {
         }
       },
 
+      FolderGetAllChildren: function(args, callback){
+        "use strict";
+        if (args.parentFolderId!==-1){
+          callback({
+            FolderGetAllChildrenResult: {
+              Errors: {
+                string: ['The folder does not exist or user does not have access.']
+              }
+            }
+          });
+        }else {
+          callback({
+            FolderGetAllChildrenResult: {
+              Folders: {
+                Folder: [
+                  {
+                    Id: 1,
+                    Name: 'Personal Folders',
+                    TypeId: 1,
+                    ParentFolderId: -1
+                  },
+                  {
+                    Id: 23,
+                    Name: 'Персональная папка',
+                    TypeId: 1,
+                    ParentFolderId: -1
+                  }
+                ]
+              }
+            }
+          })
+        }
+      },
+
       FolderGet: function(args, callback){
         "use strict";
         if (args.folderId!==1){

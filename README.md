@@ -35,6 +35,7 @@ Website: https://thycotic.com/products/secret-server/
  - **Authenticate** (as part of class constructor logic)
  - **DownloadFileAttachmentByItemId** - gets filename and contents by ID, used to download attached SSH keys and documents
  - **FolderGet** - gets a specific folder by Id
+ - **FolderGetAllChildren** -  returns all child folders for a particular folder
  - **GetSecret** - gets secret by ID with all fields as an associative array (name=>[properties])
  - **SearchFolders** - gets list of all folders with keyword in names
  - **SearchSecrets** - gets list of all secrets summaries (shortened secret profiles) with keyword in names
@@ -73,7 +74,6 @@ Website: https://thycotic.com/products/secret-server/
     FolderExtendedGet
     FolderExtendedGetNew
     FolderExtendedUpdate
-    FolderGetAllChildren
     FolderUpdate
     GeneratePassword
     GetAllGroups

@@ -70,6 +70,19 @@ describe("SearchFolders", function(){
   });
 })
 
+describe("FolderGetAllChildren", function(){
+  "use strict";
+  it('it should result in error if there is no matches', function(){
+    return expect(goodLogin().FolderGetAllChildren(999)).to.eventually.be.rejectedWith('The folder does not exist or user does not have access.');
+  })
+  it('it should return matches for existent Folder', function(){
+    return expect(goodLogin().FolderGetAllChildren(-1)).to.eventually
+      .have.property(0)
+        .that.has.property('Id')
+          .that.is.equal(1);
+  });
+})
+
 describe("FolderGet", function(){
   "use strict";
   it('it should return null if there is no matches', function(){
