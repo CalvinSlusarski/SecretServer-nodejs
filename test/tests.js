@@ -8,7 +8,7 @@ function badLogin(){
 
 function goodLogin(){
   "use strict";
-  if (typeof goodLogin.connection == 'undefined'){ // to not to flood server with connections
+  if (typeof goodLogin.connection === 'undefined'){ // to not to flood server with connections
     goodLogin.connection=new TSSClient("http://localhost:8001", "goodlogin", "goodpassword");
   }
   return goodLogin.connection;
@@ -48,7 +48,7 @@ describe("SearchSecrets", function(){
   "use strict";
   it('it should return empty array if there is no matches', function(){
     return expect(goodLogin().SearchSecrets("nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
-  })
+  });
   it('it should return match for existent Secret', function(){
     return expect(goodLogin().SearchSecrets("Secret")).to.eventually
       .have.property(0)
@@ -61,7 +61,7 @@ describe("SearchFolders", function(){
   "use strict";
   it('it should return empty array if there is no matches', function(){
     return expect(goodLogin().SearchFolders("nosuchfolder")).to.eventually.to.be.an('array').that.is.empty;
-  })
+  });
   it('it should return match for existent Folders', function(){
     return expect(goodLogin().SearchFolders("")).to.eventually
       .have.property(0)
@@ -74,7 +74,7 @@ describe("FolderGetAllChildren", function(){
   "use strict";
   it('it should result in error if there is no matches', function(){
     return expect(goodLogin().FolderGetAllChildren(999)).to.eventually.be.rejectedWith('The folder does not exist or user does not have access.');
-  })
+  });
   it('it should return matches for existent Folder', function(){
     return expect(goodLogin().FolderGetAllChildren(-1)).to.eventually
       .have.property(0)
@@ -87,7 +87,7 @@ describe("FolderGet", function(){
   "use strict";
   it('it should return null if there is no matches', function(){
     return expect(goodLogin().FolderGet(999)).to.eventually.to.be.null;
-  })
+  });
   it('it should return match for existent Folder', function(){
     return expect(goodLogin().FolderGet(1)).to.eventually.have.property('Id')
   });
@@ -97,7 +97,7 @@ describe("SearchSecretsByFolder", function(){
   "use strict";
   it('it should return empty array if there is no matches', function(){
     return expect(goodLogin().SearchSecretsByFolder("nosuchsecret", 999)).to.eventually.to.be.an('array').that.is.empty;
-  })
+  });
   it('it should return match for existent Secret', function(){
     return expect(goodLogin().SearchSecretsByFolder("Secret", 1)).to.eventually
       .have.property(0)
@@ -110,7 +110,7 @@ describe("SearchSecretsByFieldValue", function(){
   "use strict";
   it('it should return empty array if there is no matches', function(){
     return expect(goodLogin().SearchSecretsByFieldValue("Secret Name", "nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
-  })
+  });
   it('it should return match for existent Secret', function(){
     return expect(goodLogin().SearchSecretsByFieldValue("Secret Name", "Secret")).to.eventually
       .have.property(0)
@@ -123,7 +123,7 @@ describe("SearchSecretsByExposedValues", function(){
   "use strict";
   it('it should return empty array if there is no matches', function(){
     return expect(goodLogin().SearchSecretsByExposedValues("nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
-  })
+  });
   it('it should return match for existent Secret', function(){
     return expect(goodLogin().SearchSecretsByExposedValues("Secret")).to.eventually
       .have.property(0)
@@ -136,7 +136,7 @@ describe("SearchSecretsByExposedFieldValue", function(){
   "use strict";
   it('it should return empty array if there is no matches', function(){
     return expect(goodLogin().SearchSecretsByExposedFieldValue("Secret Name", "nosuchsecret")).to.eventually.to.be.an('array').that.is.empty;
-  })
+  });
   it('it should return match for existent Secret', function(){
     return expect(goodLogin().SearchSecretsByExposedFieldValue("Secret Name", "Secret")).to.eventually
       .have.property(0)
