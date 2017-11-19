@@ -82,6 +82,34 @@ ThycoticSecretServerClient.prototype._connect = async function (url, login, pass
 };
 
 /**
+ * method is used to get all of the favorites Secrets for the current user
+ *
+ * @param {boolean} [includeRestricted=false]
+ * @return {Promise.<SecretSummary[]>}
+ */
+ThycoticSecretServerClient.prototype.GetFavorites = async function(includeRestricted){
+  "use strict";
+  return this.connection.then((connection)=>{
+    let {client, context, token}=connection;
+    return client.GetFavoritesAsync({
+      token:token,
+      includeRestricted: includeRestricted===true
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        if (
+          answer.GetFavoritesResult.SecretSummaries!==null
+          && answer.GetFavoritesResult.SecretSummaries.hasOwnProperty('SecretSummary')
+        ) {
+          return answer.GetFavoritesResult.SecretSummaries.SecretSummary;
+        }else{
+          return [];
+        }
+      }
+    })
+  })
+};
+
+/**
  * Use this method to retrieve the history (past values) that were audited for a specific field of a Secret
  *
  * @param {number} secretId

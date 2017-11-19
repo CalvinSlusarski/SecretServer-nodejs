@@ -37,6 +37,7 @@ Website: https://thycotic.com/products/secret-server/
  - **DownloadFileAttachmentByItemId** - similar to the DownloadFileAttachment web service, but is meant to be used when a Secret has multiple file attachment fields. By setting the third parameter value, the user can choose which file to download.
  - **FolderGet** - gets a specific folder by Id
  - **FolderGetAllChildren** -  returns all child folders for a particular folder
+ - **GetFavorites** - method is used to get all of the favorites Secrets for the current user
  - **GetSecret** - gets secret by ID with all fields as an associative array (name=>[properties])
  - **GetSecretsByExposedFieldValue** - Searches for Secrets that match a field name / search term but only on Secret Fields marked Exposed for Display on the Secret Template
  - **GetSecretsByFieldValue** - Searches for Secrets that match a field name / search term. This will return all Secrets that contain a field with the specified name and have a value in that field that contains the search term
@@ -90,7 +91,6 @@ Website: https://thycotic.com/products/secret-server/
     GetDependencies
     GetDependencyGroupsForSecret
     GetDistributedEngines
-    GetFavorites
     GetNewSecret
     GetNewSecretPolicy
     GetReport

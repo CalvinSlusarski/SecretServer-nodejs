@@ -181,6 +181,26 @@ var myService = {
         }
       },
 
+      GetFavorites: function(args, callback){
+        "use strict";
+        callback({
+          GetFavoritesResult: {
+            SecretSummaries: {
+              SecretSummary: [
+                {
+                  SecretId: 1,
+                  SecretName: 'Secret',
+                  SecretTypeName: '',
+                  SecretTypeId: 1,
+                  FolderId: 1,
+                  IsRestricted: false
+                }
+              ]
+            }
+          }
+        });
+      },
+
       GetSecretsByFieldValue: function(args, callback){
         "use strict";
         if (args.searchTerm!=="Secret" || args.fieldName!=="Secret Name"){

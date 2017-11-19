@@ -187,6 +187,16 @@ describe("GetSecretItemHistoryByFieldName", function(){
   });
 });
 
+describe("GetFavorites", function(){
+  "use strict";
+  it('it should return list of favorite secrets', function(){
+    return expect(goodLogin().GetFavorites()).to.eventually
+      .have.property(0)
+      .that.has.property('SecretId')
+      .that.is.equal(1);
+  });
+});
+
 after(function() {
   mockup.close();
 });
