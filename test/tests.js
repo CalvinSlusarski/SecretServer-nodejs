@@ -174,6 +174,3 @@ describe("SearchSecretsByExposedFieldValue", function(){
 after(function() {
   mockup.close();
 });
-
-//GetSecretsByFieldValue
-//GetSecretsByExposedFieldValue

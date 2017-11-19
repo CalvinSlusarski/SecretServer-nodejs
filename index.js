@@ -11,12 +11,12 @@ const isIP = require('is-ip');
  * Connection procedure is async, all methods will wait for it to end before sending requests.
  *
  * @param {string} url
- * @param {string} login - The username for authentication (required)
- * @param {string} password - The password for authentication (required)
- * @param {?string} organization - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
- empty string or authentication will fail (not required)
- * @param {?string} domain - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
- empty string, or “(local)” indicates it is not a domain account. (not required)
+ * @param {string} login - The username for authentication
+ * @param {string} password - The password for authentication
+ * @param {string} [organization=null] - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
+ empty string or authentication will fail
+ * @param {string} [domain=null] - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
+ empty string, or “(local)” indicates it is not a domain account.
  * @constructor
  */
 function ThycoticSecretServerClient (url, login, password, organization, domain){
@@ -37,12 +37,12 @@ function ThycoticSecretServerClient (url, login, password, organization, domain)
  * Starts connection sequence with error handling.
  *
  * @param {string} url
- * @param {string} login - The username for authentication (required)
- * @param {string} password - The password for authentication (required)
- * @param {?string} organization - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
- empty string or authentication will fail (not required)
- * @param {?string} domain - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
- empty string, or “(local)” indicates it is not a domain account. (not required)
+ * @param {string} login - The username for authentication
+ * @param {string} password - The password for authentication
+ * @param {string} [organization=null] - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
+ empty string or authentication will fail
+ * @param {string} [domain=null] - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
+ empty string, or “(local)” indicates it is not a domain account.
  * @returns {Promise.<[soap, ThycoticSecretServerClient, string]>}
  * @private
  */
@@ -710,6 +710,7 @@ ThycoticSecretServerClient.prototype.isError = function(answer){
 ThycoticSecretServerClient.prototype.fixItems = async function(secret){
   "use strict";
   let items = {};
+  //some WebAPI methods return secret with Items:null
   if (
     (
       !secret.hasOwnProperty('Items')
@@ -721,7 +722,6 @@ ThycoticSecretServerClient.prototype.fixItems = async function(secret){
     )
     && secret.hasOwnProperty('Id')
   ){
-    //some WebAPI methods return secret with Items:null
     let fixed = await this.GetSecret(secret.Id);
     secret.Items = Object.assign({}, fixed.Items);
     return;
