@@ -113,10 +113,6 @@ Website: https://thycotic.com/products/secret-server/
     RunActiveDirectorySynchronization
     SaveSSHCommandMenu
     SearchSecretPolicies
-    SearchSecretsByExposedFieldValue
-    SearchSecretsByExposedValues
-    SearchSecretsByFieldValue
-    SearchSecretsByFolder
     SearchUsers
     SetCheckOutEnabled
     UpdateDependencyGroupForSecret
