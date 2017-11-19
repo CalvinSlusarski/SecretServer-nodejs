@@ -12,7 +12,10 @@ Website: https://thycotic.com/products/secret-server/
 На русском: https://thycotic.ru/
 
 
-**Tested TSS Version**: 10.3.000015
+**On-premise TSS**: v10.3.000015  
+**Online version**: supported  
+**LDAP Authentication**: supported  
+**FREE version**: _not suppored_ (no WebAPI is available)
 
 ```JavaScript
     let {TSSClient} = require('@mr.xcray/thycotic-secretserver-client');
@@ -29,7 +32,7 @@ Website: https://thycotic.com/products/secret-server/
 ```
 
 ## Implemented
-    
+ - **Authenticate** (as part of class constructor logic)
  - **DownloadFileAttachmentByItemId** - gets filename and contents by ID, used to download attached SSH keys and documents
  - **GetSecret** - gets secret by ID with all fields as an associative array (name=>[properties])
  - **SearchFolders** - gets list of all folders with keyword in names
@@ -54,7 +57,6 @@ Website: https://thycotic.com/products/secret-server/
     AssignSecretPolicyForSecret
     AssignSite
     AssignUserToGroup
-    Authenticate
     AuthenticateRADIUS
     ChangePassword
     CheckIn

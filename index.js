@@ -33,12 +33,16 @@ function ThycoticSecretServerClient (url, login, password){
  * Starts connection sequence with error handling.
  *
  * @param {string} url
- * @param {string} login
- * @param {string} password
+ * @param {string} login - The username for authentication (required)
+ * @param {string} password - The password for authentication (required)
+ * @param {?string} organization - The organization code if using Secret Server Online. For installed Secret Server, you must specify null or an
+ empty string or authentication will fail (not required)
+ * @param {?string} domain - The domain if attempting to authenticate using a domain account. For non-domain accounts, passing null,
+ empty string, or “(local)” indicates it is not a domain account. (not required)
  * @returns {Promise.<[soap, ThycoticSecretServerClient, string]>}
  * @private
  */
-ThycoticSecretServerClient.prototype._connect = async function (url, login, password){
+ThycoticSecretServerClient.prototype._connect = async function (url, login, password, organization, domain){
   "use strict";
 
   url = await this.fixURL(url);
@@ -51,9 +55,18 @@ ThycoticSecretServerClient.prototype._connect = async function (url, login, pass
   }
   let oThis = this;
 
+  if (domain===undefined){
+    domain=null;
+  }
+  if (organization===undefined){
+    organization=null;
+  }
+
   return await client.AuthenticateAsync({
     username: login,
-    password: password
+    password: password,
+    organization: organization,
+    domain: domain
   }).then(async answer=>{
     if (!oThis.isError(answer)){
       return {client:client, context:oThis, token:answer.AuthenticateResult.Token};
