@@ -82,7 +82,29 @@ ThycoticSecretServerClient.prototype._connect = async function (url, login, pass
 };
 
 /**
- * Downloads file attached to secret.
+ * A web method that downloads a file attachment stored on a Secret
+ *
+ * @param {number} secretId
+ * @returns {Promise.<DownloadFileAttachmentByItemIdResult>} file object
+ */
+ThycoticSecretServerClient.prototype.DownloadFileAttachment = async function(secretId){
+  "use strict";
+  return this.connection.then((connection)=>{
+    let {client, context, token}=connection;
+    return client.DownloadFileAttachmentAsync({
+      token:token,
+      secretId:secretId,
+    }).then(async answer=>{
+      if (!context.isError(answer)){
+        return answer.DownloadFileAttachmentResult;
+      }
+    })
+  })
+};
+
+/**
+ * This is similar to the DownloadFileAttachment web service, but is meant to be used when a Secret has multiple file
+ * attachment fields. By setting the third parameter value, the user can choose which file to download.
  *
  * @param {number} secretId
  * @param {number} secretItemId

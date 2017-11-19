@@ -33,7 +33,8 @@ Website: https://thycotic.com/products/secret-server/
 
 ## Implemented
  - **Authenticate** (as part of class constructor logic)
- - **DownloadFileAttachmentByItemId** - gets filename and contents by ID, used to download attached SSH keys and documents
+ - **DownloadFileAttachment** - gets filename and contents by ID, used to download attached SSH keys and documents
+ - **DownloadFileAttachmentByItemId** - similar to the DownloadFileAttachment web service, but is meant to be used when a Secret has multiple file attachment fields. By setting the third parameter value, the user can choose which file to download.
  - **FolderGet** - gets a specific folder by Id
  - **FolderGetAllChildren** -  returns all child folders for a particular folder
  - **GetSecret** - gets secret by ID with all fields as an associative array (name=>[properties])
@@ -73,7 +74,6 @@ Website: https://thycotic.com/products/secret-server/
     DeactivateSecret
     DeleteSSHCommandMenu
     DenySecretAccessRequest
-    DownloadFileAttachment
     ExpireSecret
     FolderCreate
     FolderExtendedCreate
