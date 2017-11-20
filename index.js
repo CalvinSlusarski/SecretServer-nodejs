@@ -636,6 +636,19 @@ ThycoticSecretServerClient.prototype.FolderGetAllChildren = async function(paren
 };
 
 /**
+ * Handy query function to get only one secret.
+ *
+ * @todo enrich with query language and logic
+ * @param query
+ * @return {Promise.<Secret>}
+ * @constructor
+ */
+ThycoticSecretServerClient.prototype.QuerySecret = async function(query){
+  "use strict";
+  return (await this.SecretSummaryToSecret(await this.SearchSecrets_intersect(query)))[0];
+};
+
+/**
  * Expands SecretSummary[] into Secret[]
  *
  * @param {SecretSummary[]|SecretSummary} summaries
