@@ -808,4 +808,4 @@ ThycoticSecretServerClient.prototype.fixURL = async function(url){
 /**
  * @type {ThycoticSecretServerClient}
  */
-exports.TSSClient = ThycoticSecretServerClient;
+module.exports = ThycoticSecretServerClient;

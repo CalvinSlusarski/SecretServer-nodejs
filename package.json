@@ -1,8 +1,8 @@
 {
   "_from": "@mr.xcray/thycotic-secretserver-client",
-  "_id": "@mr.xcray/thycotic-secretserver-client@2.0.1",
+  "_id": "@mr.xcray/thycotic-secretserver-client@2.1.0",
   "_inBundle": false,
-  "_integrity": "sha512-tAAmO59tLlxBrb/XgzIzlsbeqiNGQ9sWINWs4yPkbLzT1IrK6yCHf0grGHhcEbV9ChI+KtahKwN3mKGEhvRilg==",
+  "_integrity": "sha512-wn1j2a1TGVzm0SRWgMiInPCHHTxQPmKElGyHfuaHiiZdXfhpSKwctc8kN9d48MjYrRZGtSzlFgzDYw7dve9K5w==",
   "_location": "/@mr.xcray/thycotic-secretserver-client",
   "_phantomChildren": {},
   "_requested": {
@@ -20,9 +20,10 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/@mr.xcray/thycotic-secretserver-client/-/thycotic-secretserver-client-2.0.1.tgz",
-  "_shasum": "dfb71b753cfc0bb5dae9b0c90bb5227212fa579d",
+  "_resolved": "https://registry.npmjs.org/@mr.xcray/thycotic-secretserver-client/-/thycotic-secretserver-client-2.1.0.tgz",
+  "_shasum": "a6fd889e707d1c6aeb28cfde2b238ebf0dda0613",
   "_spec": "@mr.xcray/thycotic-secretserver-client",
+  "_where": "/home/www/new.crm.afi-d.ru/.server",
   "author": {
     "name": "Denis Morozov",
     "url": "dm@afi-d.ru"
@@ -31,12 +32,24 @@
     "url": "https://github.com/Afigenius/SecretServer-nodejs/issues"
   },
   "bundleDependencies": false,
+  "dependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.0.0",
+    "ensure-array": "^1.0.0",
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "is-ip": "^2.0.0",
+    "is-valid-domain": "0.0.5",
+    "istanbul": "^0.4.5",
+    "mocha": "^4.0.1",
+    "ping": "^0.2.2",
+    "soap": "^0.23.0",
+    "url": "^0.11.0"
+  },
   "deprecated": false,
   "description": "Thycotic Secret Server NodeJS client for WebAPI",
   "homepage": "https://github.com/Afigenius/SecretServer-nodejs#readme",
-  "files": [
-    "types.js"
-  ],
   "keywords": [
     "thycotic",
     "secret",
@@ -58,20 +71,5 @@
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha"
   },
-  "version": "2.1.0",
-  "dependencies": {
-    "chai": "*",
-    "chai-as-promised": "*",
-    "coveralls": "^3.0.0",
-    "ensure-array": "^1.0.0",
-    "fs": "0.0.2",
-    "http": "0.0.0",
-    "is-ip": "^2.0.0",
-    "is-valid-domain": "0.0.5",
-    "istanbul": "^0.4.5",
-    "mocha": "*",
-    "ping": "^0.2.2",
-    "soap": "^0.23.0",
-    "url": "^0.11.0"
-  }
+  "version": "2.1.1"
 }

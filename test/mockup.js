@@ -452,7 +452,7 @@ var myService = {
 };
 
 exports.mockup = mockup;
-exports.TSSClient = require('../index.js').TSSClient;
+exports.TSSClient = require('../index.js');
 exports.chai = require('chai');
 exports.expect = exports.chai.expect;
 let chaiAsPromised = require("chai-as-promised");

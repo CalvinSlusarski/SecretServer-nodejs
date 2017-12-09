@@ -18,7 +18,7 @@ Website: https://thycotic.com/products/secret-server/
 **FREE version**: _not suppored_ (no WebAPI is available)
 
 ```JavaScript
-    let {TSSClient} = require('@mr.xcray/thycotic-secretserver-client');
+    let TSSClient = require('@mr.xcray/thycotic-secretserver-client');
       
     let client = new TSSClient(
       "domain/SecretServer", 
