@@ -19,7 +19,7 @@ const isIP = require('is-ip');
  empty string, or “(local)” indicates it is not a domain account.
  * @constructor
  */
-function ThycoticSecretServerClient (url, login, password, organization, domain){
+function ThycoticSecretServerClient (url, login, password, organization, domain, overrideurl){
   "use strict";
   //TODO: add organization and domain params to comply with Authenticate method
 
@@ -46,14 +46,15 @@ function ThycoticSecretServerClient (url, login, password, organization, domain)
  * @returns {Promise.<[soap, ThycoticSecretServerClient, string]>}
  * @private
  */
-ThycoticSecretServerClient.prototype._connect = async function (url, login, password, organization, domain){
+ThycoticSecretServerClient.prototype._connect = async function (url, login, password, organization, domain, overrideurl){
   "use strict";
-
-  url = await this.fixURL(url);
+  if(overrideurl !== true) {
+    url = await this.fixURL(url);
+  }
 
   let client=null;
   try {
-    client = await soap.createClientAsync(url);
+    client = await soap.createClientAsync(url, {endpoint: url});
   }catch(e){
     this._exception('BAD_TSS_URL');
   }
