@@ -30,7 +30,7 @@ function ThycoticSecretServerClient (url, login, password, organization, domain,
     ARRAY_OR_ONE_EXPECTED: "Argument expected to be an array or object."
   };
 
-  this.connection = this._connect(url, login, password, organization, domain);
+  this.connection = this._connect(url, login, password, organization, domain, overrideurl);
 }
 
 /**

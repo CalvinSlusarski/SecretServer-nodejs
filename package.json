@@ -1,36 +1,7 @@
 {
-  "_from": "@mr.xcray/thycotic-secretserver-client",
-  "_id": "@mr.xcray/thycotic-secretserver-client@2.1.0",
-  "_inBundle": false,
-  "_integrity": "sha512-wn1j2a1TGVzm0SRWgMiInPCHHTxQPmKElGyHfuaHiiZdXfhpSKwctc8kN9d48MjYrRZGtSzlFgzDYw7dve9K5w==",
-  "_location": "/@mr.xcray/thycotic-secretserver-client",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "@mr.xcray/thycotic-secretserver-client",
-    "name": "@mr.xcray/thycotic-secretserver-client",
-    "escapedName": "@mr.xcray%2fthycotic-secretserver-client",
-    "scope": "@mr.xcray",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/@mr.xcray/thycotic-secretserver-client/-/thycotic-secretserver-client-2.1.0.tgz",
-  "_shasum": "a6fd889e707d1c6aeb28cfde2b238ebf0dda0613",
-  "_spec": "@mr.xcray/thycotic-secretserver-client",
-  "_where": "/home/www/new.crm.afi-d.ru/.server",
-  "author": {
-    "name": "Denis Morozov",
-    "url": "dm@afi-d.ru"
-  },
-  "bugs": {
-    "url": "https://github.com/Afigenius/SecretServer-nodejs/issues"
-  },
+  "name": "noodlesoup-secret-server",
+  "version": "1.0.2",
+  "main": "index.js",
   "bundleDependencies": false,
   "dependencies": {
     "chai": "^4.1.2",
@@ -49,7 +20,6 @@
   },
   "deprecated": false,
   "description": "Thycotic Secret Server NodeJS client for WebAPI",
-  "homepage": "https://github.com/Afigenius/SecretServer-nodejs#readme",
   "keywords": [
     "thycotic",
     "secret",
@@ -62,14 +32,16 @@
     "soap"
   ],
   "license": "MIT",
-  "main": "index.js",
-  "name": "@mr.xcray/thycotic-secretserver-client",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Afigenius/SecretServer-nodejs.git"
-  },
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha"
   },
-  "version": "2.1.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CalvinSlusarski/SecretServer-nodejs.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/CalvinSlusarski/SecretServer-nodejs/issues"
+  },
+  "homepage": "https://github.com/CalvinSlusarski/SecretServer-nodejs#readme"
 }
