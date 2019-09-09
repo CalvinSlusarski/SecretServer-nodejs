@@ -807,6 +807,27 @@ ThycoticSecretServerClient.prototype.fixURL = async function(url){
 };
 
 /**
+ * A web method that uploads a file attachment on a Secret Server
+ *
+ * @param {number} secretId
+ * @param {string|undefined} fileData
+ * @param {string} fileName
+ * @returns {Promise.<UploadFileAttachmentResult>} file object
+ */
+ThycoticSecretServerClient.prototype.UploadFileAttachment = async function(secretId,fileData,fileName){
+  "use strict";
+  return this.connection.then((connection)=>{
+    let {client, context, token}=connection;
+    return client.UploadFileAttachment({
+      token:token,
+      secretId:secretId,
+      fileData:fileData,
+      fileName:fileName
+    });
+  })
+};
+
+/**
  * @type {ThycoticSecretServerClient}
  */
 module.exports = ThycoticSecretServerClient;
